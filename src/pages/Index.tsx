@@ -106,9 +106,10 @@ const Index = () => {
                   <span className="text-sm font-medium text-muted-foreground">Overall Band Score</span>
                   <span className="rounded-full bg-success/10 px-3 py-1 text-sm font-bold text-success">↑ 0.5</span>
                 </div>
-                <div className="mb-6 text-6xl font-bold text-primary font-serif">7.5</div>
+                <div className="mb-6 text-6xl font-bold text-primary font-serif">?</div>
+                <p className="mb-4 text-sm text-muted-foreground">Your score appears here after completing modules</p>
                 <div className="grid grid-cols-2 gap-3">
-                  {["Listening: 8.0", "Reading: 7.5", "Writing: 7.0", "Speaking: 7.5"].map((s) => (
+                  {["Listening: —", "Reading: —", "Writing: —", "Speaking: —"].map((s) => (
                     <div key={s} className="rounded-lg bg-muted px-3 py-2 text-center text-sm font-medium">{s}</div>
                   ))}
                 </div>

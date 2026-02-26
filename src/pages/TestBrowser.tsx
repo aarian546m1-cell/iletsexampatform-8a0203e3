@@ -1,53 +1,72 @@
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { BookOpen } from "lucide-react";
+import { Headphones, Book, PenLine, Mic, ArrowRight } from "lucide-react";
+
+const modules = [
+  {
+    icon: Headphones,
+    title: "Listening",
+    desc: "30-minute audio practice with auto-scoring across Cambridge tests",
+    to: "/tests/listening",
+    color: "bg-chart-1/10 text-chart-1",
+    borderColor: "hover:border-chart-1/40",
+  },
+  {
+    icon: Book,
+    title: "Reading",
+    desc: "60-minute CBT-style reading passages with timed exam simulation",
+    to: "/tests/reading",
+    color: "bg-chart-2/10 text-chart-2",
+    borderColor: "hover:border-chart-2/40",
+  },
+  {
+    icon: PenLine,
+    title: "Writing",
+    desc: "Task 1 & 2 with AI-powered band scoring and detailed feedback",
+    to: "/writing-tests",
+    color: "bg-chart-3/10 text-chart-3",
+    borderColor: "hover:border-chart-3/40",
+  },
+  {
+    icon: Mic,
+    title: "Speaking",
+    desc: "Record your responses and get AI band estimation with feedback",
+    to: "/tests/speaking",
+    color: "bg-chart-5/10 text-chart-5",
+    borderColor: "hover:border-chart-5/40",
+  },
+];
 
 export default function TestBrowser() {
-  const [books, setBooks] = useState<any[]>([]);
-
-  useEffect(() => {
-    supabase.from("test_books").select("*").order("book_number")
-      .then(({ data }) => { if (data) setBooks(data); });
-  }, []);
-
   return (
     <div className="min-h-screen bg-background">
       <Header />
       <div className="container py-8">
-        <div className="mb-8">
-          <h1 className="text-3xl md:text-4xl">Cambridge Practice Tests</h1>
-          <p className="mt-2 text-muted-foreground">Select a book to start practicing.</p>
+        <div className="mb-10 text-center">
+          <h1 className="text-3xl md:text-4xl">IELTS Practice Modules</h1>
+          <p className="mt-2 text-muted-foreground">Select a module to start practicing.</p>
         </div>
 
-        {books.length === 0 ? (
-          <div className="py-20 text-center">
-            <BookOpen className="mx-auto mb-4 h-12 w-12 text-muted-foreground/50" />
-            <h3 className="mb-2 font-sans text-lg font-semibold">No Tests Available Yet</h3>
-            <p className="text-muted-foreground">Tests will appear here once an admin uploads them.</p>
-          </div>
-        ) : (
-          <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-            {books.map((book) => (
-              <Link key={book.id} to={`/tests/${book.id}`}>
-                <Card className="group cursor-pointer transition-all hover:shadow-lg hover:border-primary/30">
-                  <CardContent className="p-6">
-                    <div className="mb-4 flex h-20 w-full items-center justify-center rounded-xl bg-primary/5">
-                      <span className="font-serif text-4xl font-bold text-primary">{book.book_number}</span>
-                    </div>
-                    <h3 className="mb-1 font-sans font-semibold">{book.title}</h3>
-                    <p className="text-sm text-muted-foreground">{book.description || "4 Tests • 4 Modules each"}</p>
-                    <Badge variant="secondary" className="mt-3">Cambridge {book.book_number}</Badge>
-                  </CardContent>
-                </Card>
-              </Link>
-            ))}
-          </div>
-        )}
+        <div className="mx-auto grid max-w-4xl gap-6 sm:grid-cols-2">
+          {modules.map((m) => (
+            <Link key={m.title} to={m.to}>
+              <Card className={`group cursor-pointer border-2 border-transparent transition-all hover:shadow-xl ${m.borderColor}`}>
+                <CardContent className="flex flex-col items-center p-8 text-center">
+                  <div className={`mb-5 flex h-16 w-16 items-center justify-center rounded-2xl ${m.color}`}>
+                    <m.icon className="h-8 w-8" />
+                  </div>
+                  <h3 className="mb-2 font-sans text-xl font-semibold">{m.title}</h3>
+                  <p className="mb-4 text-sm text-muted-foreground">{m.desc}</p>
+                  <span className="inline-flex items-center gap-1 text-sm font-medium text-primary opacity-0 transition-opacity group-hover:opacity-100">
+                    Start Practice <ArrowRight className="h-4 w-4" />
+                  </span>
+                </CardContent>
+              </Card>
+            </Link>
+          ))}
+        </div>
       </div>
       <Footer />
     </div>
