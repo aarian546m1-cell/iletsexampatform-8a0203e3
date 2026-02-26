@@ -12,6 +12,9 @@ import Dashboard from "./pages/Dashboard";
 import TestBrowser from "./pages/TestBrowser";
 import BookDetail from "./pages/BookDetail";
 import BandScores from "./pages/BandScores";
+import WritingTests from "./pages/WritingTests";
+import WritingExam from "./pages/WritingExam";
+import WritingResult from "./pages/WritingResult";
 import AdminPanel from "./pages/AdminPanel";
 import NotFound from "./pages/NotFound";
 
@@ -32,6 +35,9 @@ const App = () => (
             <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/tests" element={<ProtectedRoute><TestBrowser /></ProtectedRoute>} />
             <Route path="/tests/:bookId" element={<ProtectedRoute><BookDetail /></ProtectedRoute>} />
+            <Route path="/writing-tests" element={<ProtectedRoute><WritingTests /></ProtectedRoute>} />
+            <Route path="/writing-test/:testId" element={<ProtectedRoute><WritingExam /></ProtectedRoute>} />
+            <Route path="/writing-result/:testId" element={<ProtectedRoute><WritingResult /></ProtectedRoute>} />
             <Route path="/admin" element={<AdminRoute><AdminPanel /></AdminRoute>} />
             <Route path="*" element={<NotFound />} />
           </Routes>

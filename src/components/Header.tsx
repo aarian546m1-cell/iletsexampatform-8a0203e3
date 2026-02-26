@@ -3,7 +3,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useTheme } from "@/hooks/use-theme";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
-import { Sun, Moon, Menu, LogOut, LayoutDashboard, BookOpen, GraduationCap, Shield } from "lucide-react";
+import { Sun, Moon, Menu, LogOut, LayoutDashboard, BookOpen, GraduationCap, Shield, PenLine } from "lucide-react";
 import { useState } from "react";
 
 export default function Header() {
@@ -14,6 +14,7 @@ export default function Header() {
 
   const navLinks = [
     { to: "/tests", label: "Practice Tests", icon: BookOpen },
+    { to: "/writing-tests", label: "Writing Tests", icon: PenLine },
     { to: "/band-scores", label: "Band Scores", icon: GraduationCap },
   ];
 
