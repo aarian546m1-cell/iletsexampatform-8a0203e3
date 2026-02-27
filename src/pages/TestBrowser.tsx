@@ -17,7 +17,7 @@ const modules = [
     icon: Book,
     title: "Reading",
     desc: "60-minute CBT-style reading passages with timed exam simulation",
-    to: "/tests/reading",
+    to: "/reading-tests",
     color: "bg-chart-2/10 text-chart-2",
     borderColor: "hover:border-chart-2/40",
   },

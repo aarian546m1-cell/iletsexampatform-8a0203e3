@@ -15,6 +15,9 @@ import BandScores from "./pages/BandScores";
 import WritingTests from "./pages/WritingTests";
 import WritingExam from "./pages/WritingExam";
 import WritingResult from "./pages/WritingResult";
+import ReadingTests from "./pages/ReadingTests";
+import ReadingExam from "./pages/ReadingExam";
+import ReadingResult from "./pages/ReadingResult";
 import AdminPanel from "./pages/AdminPanel";
 import NotFound from "./pages/NotFound";
 
@@ -38,6 +41,9 @@ const App = () => (
             <Route path="/writing-tests" element={<ProtectedRoute><WritingTests /></ProtectedRoute>} />
             <Route path="/writing-test/:testId" element={<ProtectedRoute><WritingExam /></ProtectedRoute>} />
             <Route path="/writing-result/:testId" element={<ProtectedRoute><WritingResult /></ProtectedRoute>} />
+            <Route path="/reading-tests" element={<ProtectedRoute><ReadingTests /></ProtectedRoute>} />
+            <Route path="/reading-test/:testId" element={<ProtectedRoute><ReadingExam /></ProtectedRoute>} />
+            <Route path="/reading-result/:testId" element={<ProtectedRoute><ReadingResult /></ProtectedRoute>} />
             <Route path="/admin" element={<AdminRoute><AdminPanel /></AdminRoute>} />
             <Route path="*" element={<NotFound />} />
           </Routes>
