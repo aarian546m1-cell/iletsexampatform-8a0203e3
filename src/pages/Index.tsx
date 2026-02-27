@@ -7,10 +7,10 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Headphones, Book, PenLine, Mic, ArrowRight, CheckCircle, TrendingUp, Clock } from "lucide-react";
 
 const modules = [
-  { icon: Headphones, title: "Listening", desc: "30-minute audio practice with auto-scoring", color: "bg-chart-1/10 text-chart-1" },
-  { icon: Book, title: "Reading", desc: "60-minute CBT-style reading passages", color: "bg-chart-2/10 text-chart-2" },
-  { icon: PenLine, title: "Writing", desc: "Task 1 & 2 with AI-powered feedback", color: "bg-chart-3/10 text-chart-3" },
-  { icon: Mic, title: "Speaking", desc: "Record & get AI band estimation", color: "bg-chart-5/10 text-chart-5" },
+  { icon: Headphones, title: "Listening", desc: "30-minute audio practice with auto-scoring", color: "bg-chart-1/10 text-chart-1", to: "/tests/listening" },
+  { icon: Book, title: "Reading", desc: "60-minute CBT-style reading passages", color: "bg-chart-2/10 text-chart-2", to: "/tests/reading" },
+  { icon: PenLine, title: "Writing", desc: "Task 1 & 2 with AI-powered feedback", color: "bg-chart-3/10 text-chart-3", to: "/writing-tests" },
+  { icon: Mic, title: "Speaking", desc: "Record & get AI band estimation", color: "bg-chart-5/10 text-chart-5", to: "/tests/speaking" },
 ];
 
 const features = [
@@ -66,15 +66,17 @@ const Index = () => {
           </div>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {modules.map((m) => (
-              <Card key={m.title} className="group cursor-pointer border-transparent bg-card transition-all hover:border-border hover:shadow-lg">
-                <CardContent className="p-6">
-                  <div className={`mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl ${m.color}`}>
-                    <m.icon className="h-6 w-6" />
-                  </div>
-                  <h3 className="mb-2 font-sans text-lg font-semibold">{m.title}</h3>
-                  <p className="text-sm text-muted-foreground">{m.desc}</p>
-                </CardContent>
-              </Card>
+              <Link key={m.title} to={m.to}>
+                <Card className="group cursor-pointer border-transparent bg-card transition-all hover:border-border hover:shadow-lg">
+                  <CardContent className="p-6">
+                    <div className={`mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl ${m.color}`}>
+                      <m.icon className="h-6 w-6" />
+                    </div>
+                    <h3 className="mb-2 font-sans text-lg font-semibold">{m.title}</h3>
+                    <p className="text-sm text-muted-foreground">{m.desc}</p>
+                  </CardContent>
+                </Card>
+              </Link>
             ))}
           </div>
         </div>
