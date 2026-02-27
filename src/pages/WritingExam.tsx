@@ -192,7 +192,7 @@ export default function WritingExam() {
 
       {/* Main content — split pane */}
       <div className="flex flex-1 overflow-hidden">
-        {/* LEFT — Questions */}
+        {/* LEFT — Questions (50%) */}
         <ScrollArea className="w-1/2 border-r">
           <div className="p-6">
             <Tabs
@@ -234,66 +234,70 @@ export default function WritingExam() {
           </div>
         </ScrollArea>
 
-        {/* RIGHT — Answer area */}
+        {/* RIGHT — Answer area (50%) */}
         <div className="flex w-1/2 flex-col">
-          <Tabs
-            value={activeTab}
-            onValueChange={setActiveTab}
-            className="flex flex-1 flex-col"
-          >
-            <div className="border-b px-4 pt-3">
-              <TabsList className="w-full">
-                <TabsTrigger value="task1" className="flex-1">
-                  Task 1 Answer
-                </TabsTrigger>
-                <TabsTrigger value="task2" className="flex-1">
-                  Task 2 Answer
-                </TabsTrigger>
-              </TabsList>
-            </div>
+          <div className="flex items-center justify-between border-b bg-muted/30 px-4 py-2">
+            <span className="text-sm font-medium text-muted-foreground">
+              {activeTab === "task1" ? "Task 1 Answer" : "Task 2 Answer"}
+            </span>
+            <span
+              className={`text-xs font-medium ${
+                activeTab === "task1"
+                  ? task1Words < 150 ? "text-destructive" : "text-muted-foreground"
+                  : task2Words < 250 ? "text-destructive" : "text-muted-foreground"
+              }`}
+            >
+              {activeTab === "task1"
+                ? `${task1Words} / 150 words${task1Words < 150 ? " (below minimum)" : ""}`
+                : `${task2Words} / 250 words${task2Words < 250 ? " (below minimum)" : ""}`}
+            </span>
+          </div>
 
-            <TabsContent value="task1" className="flex flex-1 flex-col p-4">
+          <div className="flex flex-1 flex-col p-4">
+            {activeTab === "task1" ? (
               <Textarea
                 value={task1Text}
                 onChange={(e) => setTask1Text(e.target.value)}
-                placeholder="Write your Task 1 answer here..."
-                className="flex-1 resize-none font-sans text-sm leading-relaxed"
+                placeholder="Write your Task 1 answer here... (minimum 150 words)"
+                className="min-h-0 flex-1 resize-none rounded-lg border bg-background p-4 font-sans text-sm leading-relaxed focus-visible:ring-2 focus-visible:ring-primary"
                 disabled={submitted}
+                style={{ height: "100%" }}
               />
-              <div className="mt-2 flex items-center justify-between text-xs">
-                <span
-                  className={
-                    task1Words < 150
-                      ? "font-medium text-destructive"
-                      : "text-muted-foreground"
-                  }
-                >
-                  {task1Words} / 150 words {task1Words < 150 && "(below minimum)"}
-                </span>
-              </div>
-            </TabsContent>
-
-            <TabsContent value="task2" className="flex flex-1 flex-col p-4">
+            ) : (
               <Textarea
                 value={task2Text}
                 onChange={(e) => setTask2Text(e.target.value)}
-                placeholder="Write your Task 2 answer here..."
-                className="flex-1 resize-none font-sans text-sm leading-relaxed"
+                placeholder="Write your Task 2 answer here... (minimum 250 words)"
+                className="min-h-0 flex-1 resize-none rounded-lg border bg-background p-4 font-sans text-sm leading-relaxed focus-visible:ring-2 focus-visible:ring-primary"
                 disabled={submitted}
+                style={{ height: "100%" }}
               />
-              <div className="mt-2 flex items-center justify-between text-xs">
-                <span
-                  className={
-                    task2Words < 250
-                      ? "font-medium text-destructive"
-                      : "text-muted-foreground"
-                  }
-                >
-                  {task2Words} / 250 words {task2Words < 250 && "(below minimum)"}
-                </span>
-              </div>
-            </TabsContent>
-          </Tabs>
+            )}
+          </div>
+
+          {/* Tab switcher at bottom */}
+          <div className="flex border-t">
+            <button
+              onClick={() => setActiveTab("task1")}
+              className={`flex-1 py-2.5 text-center text-sm font-medium transition-colors ${
+                activeTab === "task1"
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-muted/50 text-muted-foreground hover:bg-muted"
+              }`}
+            >
+              Task 1
+            </button>
+            <button
+              onClick={() => setActiveTab("task2")}
+              className={`flex-1 py-2.5 text-center text-sm font-medium transition-colors ${
+                activeTab === "task2"
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-muted/50 text-muted-foreground hover:bg-muted"
+              }`}
+            >
+              Task 2
+            </button>
+          </div>
         </div>
       </div>
 
