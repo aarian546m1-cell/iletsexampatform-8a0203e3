@@ -90,4 +90,84 @@ export const WRITING_TESTS: WritingTest[] = [
       prompt: "You should spend about 40 minutes on this task.\n\nNowadays many people choose to be self-employed.\n\nWhy is this?\n\nWhat are the disadvantages?\n\nWrite at least 250 words.",
     },
   },
+  {
+    id: 9,
+    task1: {
+      image: "https://i.postimg.cc/BQYgbRgg/Gemini-Generated-Image-o9fa8ro9fa8ro9fa.png",
+      prompt: "You should spend about 20 minutes on this task.\n\nThe chart below shows the results of a survey about people's coffee and tea buying and drinking habits in five Australian cities.\n\nSummarise the information by selecting and reporting the main features, and make comparisons where relevant.\n\nWrite at least 150 words.",
+    },
+    task2: {
+      prompt: "You should spend about 40 minutes on this task.\n\nWrite about the following topic:\n\nIn some countries, owning a home rather than renting one is very important for people.\n\nWhy might this be the case?\n\nDo you think this is a positive or negative situation?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience.\n\nWrite at least 250 words.",
+    },
+  },
+  {
+    id: 10,
+    task1: {
+      image: "https://i.postimg.cc/7Y26J21K/Gemini-Generated-Image-u0y5wju0y5wju0y5.png",
+      prompt: "You should spend about 20 minutes on this task.\n\nThe graph below shows the number of tourists visiting a particular Caribbean island between 2010 and 2017.\n\nSummarise the information by selecting and reporting the main features, and make comparisons where relevant.\n\nWrite at least 150 words.",
+    },
+    task2: {
+      prompt: "You should spend about 40 minutes on this task.\n\nWrite about the following topic:\n\nIn the future, nobody will buy printed newspapers or books because they will be able to read everything they want online without paying.\n\nTo what extent do you agree or disagree with this statement?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience.\n\nWrite at least 250 words.",
+    },
+  },
+  {
+    id: 11,
+    task1: {
+      image: "https://i.postimg.cc/2jgmjw5Q/Gemini-Generated-Image-rclk8prclk8prclk.png",
+      prompt: "You should spend about 20 minutes on this task.\n\nThe diagram below shows how instant noodles are manufactured.\n\nSummarise the information by selecting and reporting the main features, and make comparisons where relevant.\n\nWrite at least 150 words.",
+    },
+    task2: {
+      prompt: "You should spend about 40 minutes on this task.\n\nWrite about the following topic:\n\nSome people say that advertising is extremely successful at persuading us to buy things. Other people think that advertising is so common that we no longer pay attention to it.\n\nDiscuss both these views and give your own opinion.\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience.\n\nWrite at least 250 words.",
+    },
+  },
+  {
+    id: 12,
+    task1: {
+      image: "https://i.postimg.cc/ZKzgDDRM/Gemini-Generated-Image-np736lnp736lnp73.png",
+      prompt: "You should spend about 20 minutes on this task.\n\nThe chart below shows what Anthropology graduates from one university did after finishing their undergraduate degree course. The table shows the salaries of the anthropologists in work after five years.\n\nSummarise the information by selecting and reporting the main features, and make comparisons where relevant.\n\nWrite at least 150 words.",
+    },
+    task2: {
+      prompt: "You should spend about 40 minutes on this task.\n\nWrite about the following topic:\n\nIn some cultures, children are often told that they can achieve anything if they try hard enough.\n\nWhat are the advantages and disadvantages of giving children this message?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience.\n\nWrite at least 250 words.",
+    },
+  },
+  {
+    id: 13,
+    task1: {
+      image: "https://i.postimg.cc/jdq65zk3/Gemini-Generated-Image-qrw1q3qrw1q3qrw1.png",
+      prompt: "You should spend about 20 minutes on this task.\n\nThe charts below show the changes in ownership of electrical appliances and amount of time spent doing housework in households in one country between 1920 and 2019.\n\nSummarise the information by selecting and reporting the main features, and make comparisons where relevant.\n\nWrite at least 150 words.",
+    },
+    task2: {
+      prompt: "You should spend about 40 minutes on this task.\n\nWrite about the following topic:\n\nIn some countries, more and more people are becoming interested in finding out about the history of the house or building they live in.\n\nWhat are the reasons for this?\n\nHow can people research this?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience.\n\nWrite at least 250 words.",
+    },
+  },
+  {
+    id: 14,
+    task1: {
+      image: "https://i.postimg.cc/kgm2G950/a16t3w1.jpg",
+      prompt: "You should spend about 20 minutes on this task.\n\nThe plans below show the site of an airport now and how it will look after redevelopment next year.\n\nSummarise the information by selecting and reporting the main features, and make comparisons where relevant.\n\nWrite at least 150 words.",
+    },
+    task2: {
+      prompt: "You should spend about 40 minutes on this task.\n\nWrite about the following topic:\n\nMany manufactured food and drink products contain high levels of sugar, which causes many health problems. Sugary products should be made more expensive to encourage people to consume less sugar.\n\nDo you agree or disagree?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience.\n\nWrite at least 250 words.",
+    },
+  },
+  {
+    id: 15,
+    task1: {
+      image: "https://i.postimg.cc/G3vr2DT5/Gemini-Generated-Image-6mottz6mottz6mot.png",
+      prompt: "You should spend about 20 minutes on this task.\n\nThe diagram below shows the process for recycling plastic bottles.\n\nSummarise the information by selecting and reporting the main features, and make comparisons where relevant.\n\nWrite at least 150 words.",
+    },
+    task2: {
+      prompt: "You should spend about 40 minutes on this task.\n\nWrite about the following topic:\n\nIn the future all cars, buses and trucks will be driverless. The only people traveling inside these vehicles will be passengers.\n\nDo you think the advantages of driverless vehicles outweigh the disadvantages?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience.\n\nWrite at least 250 words.",
+    },
+  },
+  {
+    id: 16,
+    task1: {
+      image: "https://i.postimg.cc/hvZ0gvgc/Gemini-Generated-Image-egs35cegs35cegs3.png",
+      prompt: "You should spend about 20 minutes on this task.\n\nThe diagram below shows the manufacturing process for making sugar from sugar cane.\n\nSummarise the information by selecting and reporting the main features, and make comparisons where relevant.\n\nWrite at least 150 words.",
+    },
+    task2: {
+      prompt: "You should spend about 40 minutes on this task.\n\nWrite about the following topic:\n\nIn their advertising, businesses nowadays usually emphasise that their products are new in some way.\n\nWhy is this? Do you think it is a positive or negative development?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience.\n\nWrite at least 250 words.",
+    },
+  },
 ];

@@ -18,7 +18,7 @@ export default function WritingTests() {
           </Badge>
           <h1 className="text-3xl md:text-4xl">IELTS Writing Mock Test</h1>
           <p className="mt-2 text-muted-foreground">
-            Complete 8 full writing tests under timed exam conditions. Each test
+            Complete {WRITING_TESTS.length} full writing tests under timed exam conditions. Each test
             includes Task 1 and Task 2.
           </p>
         </div>
