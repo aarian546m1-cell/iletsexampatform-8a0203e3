@@ -8,7 +8,7 @@ import { Headphones, Book, PenLine, Mic, ArrowRight, CheckCircle, TrendingUp, Cl
 
 const modules = [
   { icon: Headphones, title: "Listening", desc: "30-minute audio practice with auto-scoring", color: "bg-chart-1/10 text-chart-1", to: "/tests/listening" },
-  { icon: Book, title: "Reading", desc: "60-minute CBT-style reading passages", color: "bg-chart-2/10 text-chart-2", to: "/tests/reading" },
+  { icon: Book, title: "Reading", desc: "60-minute CBT-style reading passages", color: "bg-chart-2/10 text-chart-2", to: "/reading-tests" },
   { icon: PenLine, title: "Writing", desc: "Task 1 & 2 with AI-powered feedback", color: "bg-chart-3/10 text-chart-3", to: "/writing-tests" },
   { icon: Mic, title: "Speaking", desc: "Record & get AI band estimation", color: "bg-chart-5/10 text-chart-5", to: "/tests/speaking" },
 ];
