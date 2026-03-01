@@ -752,6 +752,9 @@ Several approaches to debris mitigation and removal are being developed. Mitigat
 International cooperation is essential for addressing the space debris problem, as debris in orbit does not respect national boundaries and the actions of any one country can affect all space-faring nations. However, existing international legal frameworks, including the Outer Space Treaty of 1967, were not designed to address the debris issue and provide no mechanism for enforcement of debris mitigation guidelines. Developing effective governance mechanisms for the long-term sustainability of the space environment is one of the most important challenges facing the international space community.`
 );
 
+import { READING_TESTS_2 } from "./reading-tests-data-2";
+
 export const READING_TESTS: ReadingTest[] = [
   test1, test2, test3, test4, test5, test6, test7, test8, test9, test10,
+  ...READING_TESTS_2,
 ];
