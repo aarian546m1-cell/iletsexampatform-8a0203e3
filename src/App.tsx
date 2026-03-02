@@ -18,6 +18,9 @@ import WritingResult from "./pages/WritingResult";
 import ReadingTests from "./pages/ReadingTests";
 import ReadingExam from "./pages/ReadingExam";
 import ReadingResult from "./pages/ReadingResult";
+import SpeakingTests from "./pages/SpeakingTests";
+import SpeakingTest from "./pages/SpeakingTest";
+import SpeakingResult from "./pages/SpeakingResult";
 import AdminPanel from "./pages/AdminPanel";
 import NotFound from "./pages/NotFound";
 
@@ -44,6 +47,9 @@ const App = () => (
             <Route path="/reading-tests" element={<ProtectedRoute><ReadingTests /></ProtectedRoute>} />
             <Route path="/reading-test/:testId" element={<ProtectedRoute><ReadingExam /></ProtectedRoute>} />
             <Route path="/reading-result/:testId" element={<ProtectedRoute><ReadingResult /></ProtectedRoute>} />
+            <Route path="/speaking-tests" element={<ProtectedRoute><SpeakingTests /></ProtectedRoute>} />
+            <Route path="/speaking-test/:testId" element={<ProtectedRoute><SpeakingTest /></ProtectedRoute>} />
+            <Route path="/speaking-result/:testId" element={<ProtectedRoute><SpeakingResult /></ProtectedRoute>} />
             <Route path="/admin" element={<AdminRoute><AdminPanel /></AdminRoute>} />
             <Route path="*" element={<NotFound />} />
           </Routes>
