@@ -201,7 +201,17 @@ export default function SpeakingTest() {
         startPart2();
       }
     } else if (part === "part2-speak") {
-      // Timer handles this
+      // Early finish - stop timer and move to Part 3
+      clearInterval(timerRef.current);
+      setTimerActive(false);
+      setTimer(0);
+      const msg = "Thank you. That's the end of Part 2. Now let's move on to Part 3, where I'll ask you some questions related to the topic.";
+      addExaminerMessage(msg);
+      speak(msg, () => {
+        setPart("part3");
+        setQuestionIndex(0);
+        askPart3Question(0);
+      });
     } else if (part === "part3") {
       const nextQ = questionIndex + 1;
       if (nextQ < (topic?.part3Questions.length ?? 0) && nextQ < 5) {
@@ -367,7 +377,7 @@ export default function SpeakingTest() {
           <Badge variant="secondary" className="text-xs">{partLabel}</Badge>
           <Progress value={partProgress} className="h-2 flex-1" />
           {timerActive && (
-            <Badge variant={timer <= 10 ? "destructive" : "outline"} className="tabular-nums">
+            <Badge variant={timer <= 15 ? "destructive" : "outline"} className="tabular-nums">
               <Clock className="mr-1 h-3 w-3" />
               {formatTime(timer)}
             </Badge>
