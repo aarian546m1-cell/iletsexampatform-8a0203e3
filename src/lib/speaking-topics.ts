@@ -330,5 +330,325 @@ export const SPEAKING_TOPICS: SpeakingTopic[] = [
       "Should the government regulate social media platforms?",
       "How can people become more critical consumers of media?"
     ]
+  },
+  {
+    id: 11,
+    title: "Society & Social Issues",
+    part1Questions: [
+      "Do you think your neighbourhood is a good place to live?",
+      "How well do you know your neighbours?",
+      "What social events are popular in your community?",
+      "Do you think people help each other enough in your society?",
+      "Has your community changed much in recent years?",
+      "Do you think it's important to be involved in your local community?",
+      "What social issues concern you the most?",
+      "Do you prefer living in a close-knit community or a more independent lifestyle?"
+    ],
+    cueCard: {
+      topic: "Describe a social problem in your country that you think is important.",
+      points: [
+        "What the problem is",
+        "How it affects people",
+        "What is being done about it",
+        "How you feel about this issue"
+      ],
+      followUp: "Do you think this problem will be solved in the future?"
+    },
+    part3Questions: [
+      "What are the biggest social challenges facing your country today?",
+      "How can governments address inequality in society?",
+      "Do you think social media helps or hinders social progress?",
+      "Is it the responsibility of individuals or governments to solve social problems?",
+      "How has the concept of community changed over the past few decades?",
+      "What role does education play in solving social issues?"
+    ]
+  },
+  {
+    id: 12,
+    title: "Business & Entrepreneurship",
+    part1Questions: [
+      "Have you ever thought about starting your own business?",
+      "What kind of businesses are popular in your area?",
+      "Do you prefer shopping at local businesses or big chains?",
+      "Have you ever worked in a business environment?",
+      "What qualities do you think a successful businessperson needs?",
+      "Do you think it's easy to start a business in your country?",
+      "Would you rather work for someone else or be your own boss?",
+      "How important is money to you?"
+    ],
+    cueCard: {
+      topic: "Describe a successful business you know about.",
+      points: [
+        "What the business is",
+        "How it became successful",
+        "What products or services it offers",
+        "Why you admire this business"
+      ],
+      followUp: "Would you like to run a similar business?"
+    },
+    part3Questions: [
+      "What makes a business successful in today's world?",
+      "Do you think small businesses can compete with large corporations?",
+      "How has technology changed the way businesses operate?",
+      "Should governments provide more support for entrepreneurs?",
+      "What are the risks and rewards of starting your own business?",
+      "How important is innovation in the business world?"
+    ]
+  },
+  {
+    id: 13,
+    title: "Science & Innovation",
+    part1Questions: [
+      "Are you interested in science?",
+      "Did you enjoy science lessons at school?",
+      "What area of science do you find most fascinating?",
+      "Do you follow any science-related news?",
+      "Have you ever visited a science museum or exhibition?",
+      "Do you think science is important in everyday life?",
+      "What scientific discovery do you think has been the most important?",
+      "Would you like to work in a science-related field?"
+    ],
+    cueCard: {
+      topic: "Describe a scientific discovery or invention that has had a big impact on society.",
+      points: [
+        "What it is",
+        "When it was discovered or invented",
+        "How it has changed people's lives",
+        "How you feel about its impact"
+      ],
+      followUp: "Do you think there will be even greater discoveries in the future?"
+    },
+    part3Questions: [
+      "How important is scientific research for a country's development?",
+      "Should governments invest more money in scientific research?",
+      "Do you think science always leads to positive outcomes?",
+      "How has technology influenced scientific discoveries?",
+      "What ethical issues arise from scientific advancements?",
+      "Will artificial intelligence change the future of science?"
+    ]
+  },
+  {
+    id: 14,
+    title: "Childhood & Memories",
+    part1Questions: [
+      "What is your earliest childhood memory?",
+      "Did you enjoy your childhood?",
+      "What games did you play as a child?",
+      "Who did you spend most of your time with as a child?",
+      "What was your favourite toy or activity?",
+      "Do you think children today have a better childhood than previous generations?",
+      "Is there anything from your childhood you miss?",
+      "Did you have any childhood hobbies?"
+    ],
+    cueCard: {
+      topic: "Describe a happy memory from your childhood.",
+      points: [
+        "What happened",
+        "When and where it took place",
+        "Who was involved",
+        "Why this memory makes you happy"
+      ],
+      followUp: "Do you often think about this memory?"
+    },
+    part3Questions: [
+      "How important are childhood experiences in shaping a person's character?",
+      "Do you think children today are under more pressure than in the past?",
+      "How has childhood changed with the rise of technology?",
+      "Should parents try to give their children a carefree childhood?",
+      "What role do schools play in a child's development?",
+      "Is it important for adults to maintain connections with their childhood?"
+    ]
+  },
+  {
+    id: 15,
+    title: "Lifestyle & Habits",
+    part1Questions: [
+      "What does a typical day look like for you?",
+      "Do you consider yourself an early bird or a night owl?",
+      "What habits have you tried to develop recently?",
+      "How do you spend your weekends?",
+      "Do you think you have a healthy lifestyle?",
+      "What is one thing you would change about your daily routine?",
+      "Do you prefer a structured routine or a flexible schedule?",
+      "How important is sleep to you?"
+    ],
+    cueCard: {
+      topic: "Describe a daily habit you have that you think is beneficial.",
+      points: [
+        "What the habit is",
+        "When you started doing it",
+        "How it has benefited you",
+        "Whether you would recommend it to others"
+      ],
+      followUp: "Was it easy to develop this habit?"
+    },
+    part3Questions: [
+      "Why do some people find it difficult to change their habits?",
+      "How does modern technology affect people's daily routines?",
+      "Do you think people today have a better or worse lifestyle than in the past?",
+      "What role does discipline play in maintaining a healthy lifestyle?",
+      "How do cultural differences influence people's lifestyles?",
+      "Should schools teach students about healthy habits and routines?"
+    ]
+  },
+  {
+    id: 16,
+    title: "Globalization & International Relations",
+    part1Questions: [
+      "Do you think your country is well connected to the rest of the world?",
+      "Have you ever lived or studied abroad?",
+      "Do you enjoy learning about other countries?",
+      "What foreign products are popular in your country?",
+      "Do you think globalization has been good for your country?",
+      "How important is it to learn foreign languages?",
+      "Do you follow international news?",
+      "Have you ever attended an international event or festival?"
+    ],
+    cueCard: {
+      topic: "Describe an experience that made you learn something about another culture.",
+      points: [
+        "What the experience was",
+        "When and where it happened",
+        "What you learned from it",
+        "How it changed your perspective"
+      ],
+      followUp: "Would you like to have more such experiences?"
+    },
+    part3Questions: [
+      "What are the advantages and disadvantages of globalization?",
+      "How has globalization affected local cultures and traditions?",
+      "Do you think international cooperation is becoming more important?",
+      "Should countries prioritize their own interests or work together globally?",
+      "How has the internet contributed to globalization?",
+      "What challenges does globalization create for developing countries?"
+    ]
+  },
+  {
+    id: 17,
+    title: "Communication & Relationships",
+    part1Questions: [
+      "How do you usually stay in touch with friends and family?",
+      "Do you prefer texting or calling?",
+      "How important is face-to-face communication to you?",
+      "Have you made any friends online?",
+      "Do you think people communicate differently now compared to the past?",
+      "What makes a good friend?",
+      "How do you resolve disagreements with people close to you?",
+      "Is it easy for you to make new friends?"
+    ],
+    cueCard: {
+      topic: "Describe a person who has had a positive influence on your life.",
+      points: [
+        "Who this person is",
+        "How you know them",
+        "What they have done that influenced you",
+        "How you feel about this person"
+      ],
+      followUp: "Are you still in regular contact with this person?"
+    },
+    part3Questions: [
+      "How has technology changed the way people build relationships?",
+      "Do you think online friendships are as meaningful as offline ones?",
+      "What are the most important qualities in a strong relationship?",
+      "How can communication problems lead to misunderstandings?",
+      "Is it important to maintain relationships with people from different backgrounds?",
+      "How do cultural differences affect communication styles?"
+    ]
+  },
+  {
+    id: 18,
+    title: "Public Services & Infrastructure",
+    part1Questions: [
+      "What public transport do you use most often?",
+      "Are you satisfied with the public services in your area?",
+      "How clean is your city or town?",
+      "Do you think public parks and spaces are important?",
+      "What improvements would you like to see in your local infrastructure?",
+      "How do you usually get around your city?",
+      "Do you think the roads in your area are in good condition?",
+      "Have you ever used a public library?"
+    ],
+    cueCard: {
+      topic: "Describe a public facility in your city that you think is very useful.",
+      points: [
+        "What it is",
+        "Where it is located",
+        "How often you use it",
+        "Why you think it is useful"
+      ],
+      followUp: "Do you think the government should invest more in such facilities?"
+    },
+    part3Questions: [
+      "What are the most important public services a government should provide?",
+      "How can public transport be improved in cities?",
+      "Do you think privatizing public services is a good idea?",
+      "How important is infrastructure development for a country's economy?",
+      "Should all public services be free?",
+      "How can technology improve public services?"
+    ]
+  },
+  {
+    id: 19,
+    title: "Entertainment & Leisure",
+    part1Questions: [
+      "What do you do for fun in your free time?",
+      "Do you prefer indoor or outdoor entertainment?",
+      "How often do you go to the cinema?",
+      "What kind of movies or TV shows do you enjoy?",
+      "Do you play any video games?",
+      "What is the most enjoyable thing you have done recently?",
+      "Do you think people need more leisure time?",
+      "What is your favourite way to relax after work or school?"
+    ],
+    cueCard: {
+      topic: "Describe an enjoyable activity you do in your free time.",
+      points: [
+        "What the activity is",
+        "How often you do it",
+        "Who you do it with",
+        "Why you enjoy it so much"
+      ],
+      followUp: "Would you recommend this activity to others?"
+    },
+    part3Questions: [
+      "How has entertainment changed over the past 20 years?",
+      "Do you think people spend too much time on entertainment?",
+      "Is it important for people to have hobbies?",
+      "How do different cultures approach leisure and entertainment?",
+      "What impact does the entertainment industry have on young people?",
+      "Will virtual reality change the future of entertainment?"
+    ]
+  },
+  {
+    id: 20,
+    title: "Future Plans & Ambitions",
+    part1Questions: [
+      "What are your plans for the near future?",
+      "Do you have any long-term goals?",
+      "Where do you see yourself in five years?",
+      "Have your ambitions changed over time?",
+      "What motivates you to achieve your goals?",
+      "Do you think it's important to have a plan for the future?",
+      "Would you like to live in a different country in the future?",
+      "What is the most important goal you want to achieve?"
+    ],
+    cueCard: {
+      topic: "Describe a goal you have set for yourself in the future.",
+      points: [
+        "What the goal is",
+        "When you hope to achieve it",
+        "What steps you are taking to reach it",
+        "How you will feel when you achieve it"
+      ],
+      followUp: "Do you think you will definitely achieve this goal?"
+    },
+    part3Questions: [
+      "Why is it important for young people to have ambitions?",
+      "Do you think people today set realistic goals for themselves?",
+      "How do economic conditions affect people's future plans?",
+      "Is it better to have one big goal or many smaller ones?",
+      "How important is family support in achieving your ambitions?",
+      "What challenges do people face when trying to achieve their dreams?"
+    ]
   }
 ];

@@ -102,7 +102,7 @@ export default function SpeakingTest() {
       speak(msg, () => startListening());
     } else if (part === "part2-speak") {
       stopListening();
-      const msg = "Thank you. That's the end of Part 2. Now let's move on to Part 3, where I'll ask you some questions related to the topic.";
+      const msg = "Thank you! Now let's move on to the follow-up questions of Part 3.";
       addExaminerMessage(msg);
       speak(msg, () => {
         setPart("part3");
@@ -205,7 +205,7 @@ export default function SpeakingTest() {
       clearInterval(timerRef.current);
       setTimerActive(false);
       setTimer(0);
-      const msg = "Thank you. That's the end of Part 2. Now let's move on to Part 3, where I'll ask you some questions related to the topic.";
+      const msg = "Thank you! Now let's move on to the follow-up questions of Part 3.";
       addExaminerMessage(msg);
       speak(msg, () => {
         setPart("part3");
@@ -270,10 +270,27 @@ export default function SpeakingTest() {
     });
   }
 
+  const part3AckPhrases = useRef([
+    "Good point.", "I see.", "Absolutely.", "Makes sense.",
+    "Interesting perspective.", "Thanks for sharing.", "I understand.",
+    "Noted.", "Right.", "Got it."
+  ]);
+  const lastAckIndex = useRef(-1);
+
+  function getRandomAck(): string {
+    const phrases = part3AckPhrases.current;
+    let idx: number;
+    do {
+      idx = Math.floor(Math.random() * phrases.length);
+    } while (idx === lastAckIndex.current && phrases.length > 1);
+    lastAckIndex.current = idx;
+    return phrases[idx];
+  }
+
   function askPart3Question(idx: number) {
     if (!topic) return;
     const q = topic.part3Questions[idx];
-    const ack = idx > 0 ? "That's interesting. " : "";
+    const ack = idx > 0 ? `${getRandomAck()} ` : "";
     const msg = ack + q;
     setIsSpeaking(true);
     addExaminerMessage(msg);
