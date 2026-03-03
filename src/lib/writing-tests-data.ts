@@ -170,4 +170,164 @@ export const WRITING_TESTS: WritingTest[] = [
       prompt: "You should spend about 40 minutes on this task.\n\nWrite about the following topic:\n\nIn their advertising, businesses nowadays usually emphasise that their products are new in some way.\n\nWhy is this? Do you think it is a positive or negative development?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience.\n\nWrite at least 250 words.",
     },
   },
+  {
+    id: 17,
+    task1: {
+      image: "https://i.postimg.cc/ydTdBcBg/Gemini-Generated-Image-6mbqz36mbqz36mbq.png",
+      prompt: "You should spend about 20 minutes on this task.\n\nThe maps below show an industrial area in the town of Norbiton, and planned future development of the site.\n\nSummarise the information by selecting and reporting the main features, and make comparisons where relevant.\n\nWrite at least 150 words.",
+    },
+    task2: {
+      prompt: "You should spend about 40 minutes on this task.\n\nWrite about the following topic:\n\nIt is important for people to take risks, both in their professional lives and their personal lives.\n\nDo you think the advantages of taking risks outweigh the disadvantages?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience.\n\nWrite at least 250 words.",
+    },
+  },
+  {
+    id: 18,
+    task1: {
+      image: "https://i.postimg.cc/6QtxKSQ8/Gemini-Generated-Image-to40jzto40jzto40.png",
+      prompt: "You should spend about 20 minutes on this task.\n\nThe table and charts below give information on the police budget for 2017 and 2018 in one area of Britain. The table shows where the money came from and the charts show how it was distributed.\n\nSummarise the information by selecting and reporting the main features, and make comparisons where relevant.\n\nWrite at least 150 words.",
+    },
+    task2: {
+      prompt: "You should spend about 40 minutes on this task.\n\nWrite about the following topic:\n\nSome children spend hours every day on their smartphones.\n\nWhy is this the case? Do you think this is a positive or a negative development?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience.\n\nWrite at least 250 words.",
+    },
+  },
+  {
+    id: 19,
+    task1: {
+      image: "https://i.postimg.cc/MTh8CGfx/Gemini-Generated-Image-ib4elib4elib4eli.png",
+      prompt: "You should spend about 20 minutes on this task.\n\nThe chart below gives information about how families in one country spent their weekly income in 1968 and in 2018.\n\nSummarise the information by selecting and reporting the main features, and make comparisons where relevant.\n\nWrite at least 150 words.",
+    },
+    task2: {
+      prompt: "You should spend about 40 minutes on this task.\n\nWrite about the following topic:\n\nSome people believe that professionals, such as doctors and engineers, should be required to work in the country where they did their training. Others believe they should be free to work in another country if they wish.\n\nDiscuss both these views and give your own opinion.\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience.\n\nWrite at least 250 words.",
+    },
+  },
+  {
+    id: 20,
+    task1: {
+      image: "https://i.postimg.cc/VvBHKsjK/Gemini-Generated-Image-gxn0magxn0magxn0.png",
+      prompt: "You should spend about 20 minutes on this task.\n\nThe graph below shows the number of shops that closed and the number of new shops that opened in one country between 2011 and 2018.\n\nSummarise the information by selecting and reporting the main features, and make comparisons where relevant.\n\nWrite at least 150 words.",
+    },
+    task2: {
+      prompt: "You should spend about 40 minutes on this task.\n\nWrite about the following topic:\n\nNowadays, a growing number of people with health problems are trying alternative medicines and treatments instead of visiting their usual doctor.\n\nDo you think this is a positive or a negative development?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience.\n\nWrite at least 250 words.",
+    },
+  },
+  {
+    id: 21,
+    task1: {
+      image: "https://i.postimg.cc/k5KNQ1Nx/Gemini-Generated-Image-eb5ynleb5ynleb5y.png",
+      prompt: "You should spend about 20 minutes on this task.\n\nThe graph below gives information about the percentage of the population in four Asian countries living in cities from 1970 to 2020, with predictions for 2030 and 2040.\n\nSummarise the information by selecting and reporting the main features, and make comparisons where relevant.\n\nWrite at least 150 words.",
+    },
+    task2: {
+      prompt: "You should spend about 40 minutes on this task.\n\nWrite about the following topic:\n\nThe most important aim of science should be to improve people's lives.\n\nTo what extent do you agree or disagree with this statement?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience.\n\nWrite at least 250 words.",
+    },
+  },
+  {
+    id: 22,
+    task1: {
+      image: "https://i.postimg.cc/K8XRPZ9c/Gemini-Generated-Image-j40ykhj40ykhj40y.png",
+      prompt: "You should spend about 20 minutes on this task.\n\nThe plans below show the site of a farm in 1950 and the same site today.\n\nSummarise the information by selecting and reporting the main features, and make comparisons where relevant.\n\nWrite at least 150 words.",
+    },
+    task2: {
+      prompt: "You should spend about 40 minutes on this task.\n\nWrite about the following topic:\n\nIn many countries, primary and secondary schools close for two months or more in the summer holidays.\n\nWhat is the value of long school holidays?\n\nWhat are the arguments in favour of shorter school holidays?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience.\n\nWrite at least 250 words.",
+    },
+  },
+  {
+    id: 23,
+    task1: {
+      image: "https://i.postimg.cc/Cxm5WjhM/Gemini-Generated-Image-qawcedqawcedqawc.png",
+      prompt: "You should spend about 20 minutes on this task.\n\nThe diagram below shows the floor plan of a public library 20 years ago and how it looks now.\n\nSummarise the information by selecting and reporting the main features, and make comparisons where relevant.\n\nWrite at least 150 words.",
+    },
+    task2: {
+      prompt: "You should spend about 40 minutes on this task.\n\nWrite about the following topic:\n\nIn many countries around the world, rural people are moving to cities, so the population in the countryside is decreasing.\n\nDo you think this is a positive or a negative development?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience.\n\nWrite at least 250 words.",
+    },
+  },
+  {
+    id: 24,
+    task1: {
+      image: "https://i.postimg.cc/HkhHw3WZ/Gemini-Generated-Image-i7ex7mi7ex7mi7ex.png",
+      prompt: "You should spend about 20 minutes on this task.\n\nThe graph below shows the average monthly change in the prices of three metals during 2014.\n\nSummarise the information by selecting and reporting the main features, and make comparisons where relevant.\n\nWrite at least 150 words.",
+    },
+    task2: {
+      prompt: "You should spend about 40 minutes on this task.\n\nWrite about the following topic:\n\nIn many countries, people are now living longer than ever before. Some people say an ageing population creates problems for governments. Other people think there are benefits if society has more elderly people.\n\nTo what extent do the advantages of having an ageing population outweigh the disadvantages?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience.\n\nWrite at least 250 words.",
+    },
+  },
+  {
+    id: 25,
+    task1: {
+      image: "https://i.postimg.cc/SKfd01Xn/Gemini-Generated-Image-tpvq5dtpvq5dtpvq.png",
+      prompt: "You should spend about 20 minutes on this task.\n\nThe graph below gives information on the numbers of participants for different activities at one social centre in Melbourne, Australia for the period 2000 to 2020.\n\nSummarise the information by selecting and reporting the main features, and make comparisons where relevant.\n\nWrite at least 150 words.",
+    },
+    task2: {
+      prompt: "You should spend about 40 minutes on this task.\n\nWrite about the following topic:\n\nSome people think that competition at work, at school and in daily life is a good thing. Others believe that we should try to cooperate more, rather than competing against each other.\n\nDiscuss both these views and give your own opinion.\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience.\n\nWrite at least 250 words.",
+    },
+  },
+  {
+    id: 26,
+    task1: {
+      image: "https://i.postimg.cc/jqmz1Y8P/Gemini-Generated-Image-pq6canpq6canpq6c.png",
+      prompt: "You should spend about 20 minutes on this task.\n\nThe plans below show a harbour in 2000 and how it looks today.\n\nSummarise the information by selecting and reporting the main features, and make comparisons where relevant.\n\nWrite at least 150 words.",
+    },
+    task2: {
+      prompt: "You should spend about 40 minutes on this task.\n\nWrite about the following topic:\n\nThe working week should be shorter and workers should have a longer weekend.\n\nDo you agree or disagree?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience.\n\nWrite at least 250 words.",
+    },
+  },
+  {
+    id: 27,
+    task1: {
+      image: "https://i.postimg.cc/bwC1fGpj/Gemini-Generated-Image-eh4feueh4feueh4f.png",
+      prompt: "You should spend about 20 minutes on this task.\n\nThe diagram below shows how a biofuel called ethanol is produced.\n\nSummarise the information by selecting and reporting the main features, and make comparisons where relevant.\n\nWrite at least 150 words.",
+    },
+    task2: {
+      prompt: "You should spend about 40 minutes on this task.\n\nWrite about the following topic:\n\nIt is important for everyone, including young people, to save money for their future.\n\nTo what extent do you agree or disagree with this statement?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience.\n\nWrite at least 250 words.",
+    },
+  },
+  {
+    id: 28,
+    task1: {
+      image: "https://i.postimg.cc/ZnC1jvTG/a19t4w1.jpg",
+      prompt: "You should spend about 20 minutes on this task.\n\nThe charts below give information on the location and types of dance classes young people in a town in Australia are currently attending.\n\nSummarise the information by selecting and reporting the main features, and make comparisons where relevant.\n\nWrite at least 150 words.",
+    },
+    task2: {
+      prompt: "You should spend about 40 minutes on this task.\n\nWrite about the following topic:\n\nIn many countries nowadays, consumers can go to a supermarket and buy food produced all over the world.\n\nDo you think this is a positive or negative development?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience.\n\nWrite at least 250 words.",
+    },
+  },
+  {
+    id: 29,
+    task1: {
+      image: "https://i.postimg.cc/W4vN1Vjg/Gemini-Generated-Image-u1kppnu1kppnu1kp.png",
+      prompt: "You should spend about 20 minutes on this task.\n\nThe first table below shows changes in the total population of New York City from 1800 to 2000. The second and third tables show changes in the population of the five districts of the city (Manhattan, Brooklyn, Bronx, Queens, Staten Island) over the same period.\n\nSummarise the information by selecting and reporting the main features, and make comparisons where relevant.\n\nWrite at least 150 words.",
+    },
+    task2: {
+      prompt: "You should spend about 40 minutes on this task.\n\nWrite about the following topic:\n\nAccess to clean water is a basic human right. Therefore every home should have a water supply that is provided free of charge.\n\nDo you agree or disagree?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience.\n\nWrite at least 250 words.",
+    },
+  },
+  {
+    id: 30,
+    task1: {
+      image: "https://i.postimg.cc/tJ2kYp8K/Gemini-Generated-Image-hdahjkhdahjkhdah.png",
+      prompt: "You should spend about 20 minutes on this task.\n\nThe plans below show the site of a farm in 1950 and the same site today.\n\nSummarise the information by selecting and reporting the main features, and make comparisons where relevant.\n\nWrite at least 150 words.",
+    },
+    task2: {
+      prompt: "You should spend about 40 minutes on this task.\n\nWrite about the following topic:\n\nIn many countries, primary and secondary schools close for two months or more in the summer holidays.\n\nWhat is the value of long school holidays?\n\nWhat are the arguments in favour of shorter school holidays?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience.\n\nWrite at least 250 words.",
+    },
+  },
+  {
+    id: 31,
+    task1: {
+      image: "https://i.postimg.cc/9QT9kcJc/Gemini-Generated-Image-a6uyuka6uyuka6uy.png",
+      prompt: "You should spend about 20 minutes on this task.\n\nThe charts below give information about a public library in a town called Little Chalfont.\n\nSummarise the information by selecting and reporting the main features, and make comparisons where relevant.\n\nWrite at least 150 words.",
+    },
+    task2: {
+      prompt: "You should spend about 40 minutes on this task.\n\nWrite about the following topic:\n\nSome people have decided to reduce the number of times they fly every year or to stop flying altogether.\n\nDo you think the environmental benefits of this development outweigh the disadvantages for individuals and businesses?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience.\n\nWrite at least 250 words.",
+    },
+  },
+  {
+    id: 32,
+    task1: {
+      image: "https://i.postimg.cc/NMVfYH0c/Gemini-Generated-Image-ig17ciig17ciig17.png",
+      prompt: "You should spend about 20 minutes on this task.\n\nThe diagram below shows how fabric is manufactured from bamboo.\n\nSummarise the information by selecting and reporting the main features, and make comparisons where relevant.\n\nWrite at least 150 words.",
+    },
+    task2: {
+      prompt: "You should spend about 40 minutes on this task.\n\nWrite about the following topic:\n\nMany aspects of the way people dress today are influenced by global fashion trends.\n\nHow has global fashion become such a strong influence on people's lives?\n\nDo you think this is a positive or negative development?\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience.\n\nWrite at least 250 words.",
+    },
+  },
 ];
