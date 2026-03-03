@@ -14,7 +14,7 @@ const modules = [
 ];
 
 const features = [
-  { icon: CheckCircle, title: "Cambridge 1–20", desc: "Full test library with 80 practice tests across all modules." },
+  { icon: CheckCircle, title: "Cambridge Style Test", desc: "Full test library with 80 practice tests across all modules." },
   { icon: TrendingUp, title: "Band Score Tracking", desc: "Track your progress with detailed analytics and performance charts." },
   { icon: Clock, title: "Real Exam Simulation", desc: "Timed tests that mirror the actual IELTS exam environment." },
 ];
