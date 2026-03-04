@@ -83,6 +83,28 @@ export default function SpeakingResult() {
     }
   }
 
+  useEffect(() => {
+    if (!result) return;
+    async function saveResult() {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.user) return;
+      // Save to speaking_recordings (use a placeholder module_id since speaking uses local data)
+      await supabase.from("speaking_recordings").insert({
+        user_id: session.user.id,
+        module_id: "00000000-0000-0000-0000-000000000003",
+        part_number: 0,
+        band_score: result.overallBand,
+        fluency_score: result.fluencyCoherence,
+        vocabulary_score: result.lexicalResource,
+        grammar_score: result.grammaticalRange,
+        pronunciation_score: result.pronunciation,
+        ai_feedback: result.feedback,
+        completed_at: new Date().toISOString(),
+      });
+    }
+    saveResult();
+  }, [result]);
+
   if (loading) {
     return (
       <div className="min-h-screen bg-background">

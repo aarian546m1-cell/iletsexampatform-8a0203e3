@@ -22,6 +22,7 @@ export default function Dashboard() {
   const { user, profile } = useAuth();
   const [results, setResults] = useState<any[]>([]);
   const [writingResults, setWritingResults] = useState<any[]>([]);
+  const [speakingResults, setSpeakingResults] = useState<any[]>([]);
   const [streak, setStreak] = useState({ current_streak: 0, longest_streak: 0 });
 
   useEffect(() => {
@@ -30,7 +31,9 @@ export default function Dashboard() {
       .then(({ data }) => { if (data) setResults(data); });
     supabase.from("writing_submissions").select("*").eq("user_id", user.id).not("band_score", "is", null).order("completed_at", { ascending: false }).limit(20)
       .then(({ data }) => { if (data) setWritingResults(data); });
-    supabase.from("daily_streaks").select("*").eq("user_id", user.id).single()
+    supabase.from("speaking_recordings").select("*").eq("user_id", user.id).not("band_score", "is", null).order("completed_at", { ascending: false }).limit(20)
+      .then(({ data }) => { if (data) setSpeakingResults(data); });
+    supabase.from("daily_streaks").select("*").eq("user_id", user.id).maybeSingle()
       .then(({ data }) => { if (data) setStreak(data); });
   }, [user]);
 
@@ -53,6 +56,11 @@ export default function Dashboard() {
   // From writing_submissions
   if (writingResults.length > 0) {
     moduleScores.writing = Number(writingResults[0].band_score);
+  }
+
+  // From speaking_recordings
+  if (speakingResults.length > 0) {
+    moduleScores.speaking = Number(speakingResults[0].band_score);
   }
 
   const completedModules = (Object.entries(moduleScores) as [ModuleKey, number | null][]).filter(([, v]) => v !== null);
@@ -82,6 +90,7 @@ export default function Dashboard() {
   const allResults = [
     ...results.map((r) => ({ id: r.id, band: Number(r.band_score), detail: `${r.raw_score}/${r.total_questions} correct`, date: r.completed_at, type: r.test_modules?.module_type })),
     ...writingResults.map((r) => ({ id: r.id, band: Number(r.band_score), detail: `Task 1: ${r.word_count_task1 || 0}w • Task 2: ${r.word_count_task2 || 0}w`, date: r.completed_at, type: "writing" })),
+    ...speakingResults.map((r) => ({ id: r.id, band: Number(r.band_score), detail: `F:${Number(r.fluency_score || 0).toFixed(1)} V:${Number(r.vocabulary_score || 0).toFixed(1)} G:${Number(r.grammar_score || 0).toFixed(1)} P:${Number(r.pronunciation_score || 0).toFixed(1)}`, date: r.completed_at, type: "speaking" })),
   ].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 10);
 
   const quickStart = [
@@ -155,7 +164,7 @@ export default function Dashboard() {
           <Card>
             <CardContent className="flex items-center gap-4 p-5">
               <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-success/10 text-success"><TrendingUp className="h-6 w-6" /></div>
-              <div><p className="text-sm text-muted-foreground">Tests Taken</p><p className="text-2xl font-bold">{results.length + writingResults.length}</p></div>
+              <div><p className="text-sm text-muted-foreground">Tests Taken</p><p className="text-2xl font-bold">{results.length + writingResults.length + speakingResults.length}</p></div>
             </CardContent>
           </Card>
           <Card>
