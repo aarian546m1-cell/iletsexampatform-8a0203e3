@@ -9,7 +9,7 @@ const modules = [
     icon: Headphones,
     title: "Listening",
     desc: "30-minute audio practice with auto-scoring across Cambridge tests",
-    to: "/tests",
+    to: "/listening-tests",
     color: "bg-chart-1/10 text-chart-1",
     borderColor: "hover:border-chart-1/40",
   },
