@@ -33,7 +33,7 @@ const Index = () => {
           <div className="mx-auto max-w-3xl text-center">
             <div className="mb-6 inline-flex items-center rounded-full border bg-card px-4 py-1.5 text-sm text-muted-foreground">
               <span className="mr-2 inline-block h-2 w-2 rounded-full bg-success" />
-              Cambridge IELTS 1–20 Practice Tests
+              Cambridge-style Mock Tests
             </div>
             <h1 className="mb-6 text-5xl leading-tight tracking-tight md:text-7xl">
               Master Your <span className="text-primary">IELTS</span> Score
