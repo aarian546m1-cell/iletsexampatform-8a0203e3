@@ -94,10 +94,10 @@ export default function Dashboard() {
   ].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 10);
 
   const quickStart = [
-    { icon: Headphones, label: "Listening", to: "/tests/listening", color: "bg-chart-1/10 text-chart-1" },
-    { icon: Book, label: "Reading", to: "/tests/reading", color: "bg-chart-2/10 text-chart-2" },
+    { icon: Headphones, label: "Listening", to: "/tests", color: "bg-chart-1/10 text-chart-1" },
+    { icon: Book, label: "Reading", to: "/reading-tests", color: "bg-chart-2/10 text-chart-2" },
     { icon: PenLine, label: "Writing", to: "/writing-tests", color: "bg-chart-3/10 text-chart-3" },
-    { icon: Mic, label: "Speaking", to: "/tests/speaking", color: "bg-chart-5/10 text-chart-5" },
+    { icon: Mic, label: "Speaking", to: "/speaking-tests", color: "bg-chart-5/10 text-chart-5" },
   ];
 
   return (
