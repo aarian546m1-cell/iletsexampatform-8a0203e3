@@ -17,6 +17,8 @@ import WritingExam from "./pages/WritingExam";
 import WritingResult from "./pages/WritingResult";
 import ReadingTests from "./pages/ReadingTests";
 import ListeningTests from "./pages/ListeningTests";
+import ListeningExam from "./pages/ListeningExam";
+import ListeningResult from "./pages/ListeningResult";
 import ReadingExam from "./pages/ReadingExam";
 import ReadingResult from "./pages/ReadingResult";
 import SpeakingTests from "./pages/SpeakingTests";
@@ -47,6 +49,8 @@ const App = () => (
             <Route path="/writing-result/:testId" element={<ProtectedRoute><WritingResult /></ProtectedRoute>} />
             <Route path="/reading-tests" element={<ProtectedRoute><ReadingTests /></ProtectedRoute>} />
             <Route path="/listening-tests" element={<ProtectedRoute><ListeningTests /></ProtectedRoute>} />
+            <Route path="/listening-test/:testId" element={<ProtectedRoute><ListeningExam /></ProtectedRoute>} />
+            <Route path="/listening-result/:testId" element={<ProtectedRoute><ListeningResult /></ProtectedRoute>} />
             <Route path="/reading-test/:testId" element={<ProtectedRoute><ReadingExam /></ProtectedRoute>} />
             <Route path="/reading-result/:testId" element={<ProtectedRoute><ReadingResult /></ProtectedRoute>} />
             <Route path="/speaking-tests" element={<ProtectedRoute><SpeakingTests /></ProtectedRoute>} />
