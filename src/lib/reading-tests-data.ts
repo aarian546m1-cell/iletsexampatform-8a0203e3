@@ -3,8 +3,14 @@ export type QuestionType =
   | "yes_no_not_given"
   | "multiple_choice"
   | "matching_headings"
+  | "matching_information"
+  | "matching_features"
   | "sentence_completion"
-  | "summary_completion";
+  | "summary_completion"
+  | "table_completion"
+  | "diagram_completion"
+  | "short_answer"
+  | "flow_chart_completion";
 
 export interface ReadingQuestion {
   number: number;
@@ -27,7 +33,17 @@ export interface ReadingTest {
 }
 
 import { READING_TESTS_2 } from "./reading-tests-data-2";
+import { READING_TEST_1 } from "./reading-test-1";
+import { READING_TEST_2 } from "./reading-test-2";
+import { READING_TEST_3 } from "./reading-test-3";
+import { READING_TEST_4 } from "./reading-test-4";
+import { READING_TEST_5 } from "./reading-test-5";
 
 export const READING_TESTS: ReadingTest[] = [
+  READING_TEST_1,
+  READING_TEST_2,
+  READING_TEST_3,
+  READING_TEST_4,
+  READING_TEST_5,
   ...READING_TESTS_2,
 ];

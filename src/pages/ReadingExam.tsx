@@ -231,68 +231,76 @@ export default function ReadingExam() {
               Questions {passage.questions[0].number}–{passage.questions[passage.questions.length - 1].number}
             </h3>
 
-            {passage.questions.map((q) => (
-              <div key={q.number} className="rounded-lg border bg-card p-4">
-                <p className="mb-3 text-sm font-medium">
-                  <span className="mr-2 inline-flex h-6 w-6 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">
-                    {q.number}
-                  </span>
-                  {q.text}
-                </p>
+            {passage.questions.map((q, idx) => {
+              const prevType = idx > 0 ? passage.questions[idx - 1].type : null;
+              const showInstruction = q.type !== prevType;
+              return (
+                <div key={q.number} className="space-y-3">
+                  {showInstruction && (
+                    <div className="rounded-lg bg-muted/50 p-3 text-sm font-medium text-muted-foreground italic border-l-4 border-primary/30">
+                      {getInstructionText(q.type)}
+                    </div>
+                  )}
+                  <div className="rounded-lg border bg-card p-4">
+                    <p className="mb-3 text-sm font-medium">
+                      <span className="mr-2 inline-flex h-6 w-6 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">
+                        {q.number}
+                      </span>
+                      {q.text}
+                    </p>
 
-                {/* T/F/NG or Y/N/NG */}
-                {(q.type === "true_false_not_given" || q.type === "yes_no_not_given") && (
-                  <RadioGroup
-                    value={answers[q.number] || ""}
-                    onValueChange={(v) => setAnswer(q.number, v)}
-                    className="flex flex-wrap gap-3"
-                  >
-                    {(q.type === "true_false_not_given"
-                      ? ["True", "False", "Not Given"]
-                      : ["Yes", "No", "Not Given"]
-                    ).map((opt) => (
-                      <div key={opt} className="flex items-center gap-1.5">
-                        <RadioGroupItem value={opt} id={`q${q.number}-${opt}`} />
-                        <Label htmlFor={`q${q.number}-${opt}`} className="cursor-pointer text-sm">
-                          {opt}
-                        </Label>
-                      </div>
-                    ))}
-                  </RadioGroup>
-                )}
+                    {(q.type === "true_false_not_given" || q.type === "yes_no_not_given") && (
+                      <RadioGroup
+                        value={answers[q.number] || ""}
+                        onValueChange={(v) => setAnswer(q.number, v)}
+                        className="flex flex-wrap gap-3"
+                      >
+                        {(q.type === "true_false_not_given"
+                          ? ["True", "False", "Not Given"]
+                          : ["Yes", "No", "Not Given"]
+                        ).map((opt) => (
+                          <div key={opt} className="flex items-center gap-1.5">
+                            <RadioGroupItem value={opt} id={`q${q.number}-${opt}`} />
+                            <Label htmlFor={`q${q.number}-${opt}`} className="cursor-pointer text-sm">
+                              {opt}
+                            </Label>
+                          </div>
+                        ))}
+                      </RadioGroup>
+                    )}
 
-                {/* Multiple choice / Matching headings */}
-                {(q.type === "multiple_choice" || q.type === "matching_headings") && q.options && (
-                  <RadioGroup
-                    value={answers[q.number] || ""}
-                    onValueChange={(v) => setAnswer(q.number, v)}
-                    className="space-y-2"
-                  >
-                    {q.options.map((opt) => {
-                      const val = opt.charAt(0);
-                      return (
-                        <div key={opt} className="flex items-center gap-2">
-                          <RadioGroupItem value={val} id={`q${q.number}-${val}`} />
-                          <Label htmlFor={`q${q.number}-${val}`} className="cursor-pointer text-sm">
-                            {opt}
-                          </Label>
-                        </div>
-                      );
-                    })}
-                  </RadioGroup>
-                )}
+                    {(q.type === "multiple_choice" || q.type === "matching_headings" || q.type === "matching_information" || q.type === "matching_features") && q.options && (
+                      <RadioGroup
+                        value={answers[q.number] || ""}
+                        onValueChange={(v) => setAnswer(q.number, v)}
+                        className="space-y-2"
+                      >
+                        {q.options.map((opt) => {
+                          const val = opt.split(/[.\s]/)[0];
+                          return (
+                            <div key={opt} className="flex items-center gap-2">
+                              <RadioGroupItem value={val} id={`q${q.number}-${val}`} />
+                              <Label htmlFor={`q${q.number}-${val}`} className="cursor-pointer text-sm">
+                                {opt}
+                              </Label>
+                            </div>
+                          );
+                        })}
+                      </RadioGroup>
+                    )}
 
-                {/* Sentence / Summary completion */}
-                {(q.type === "sentence_completion" || q.type === "summary_completion") && (
-                  <Input
-                    value={answers[q.number] || ""}
-                    onChange={(e) => setAnswer(q.number, e.target.value)}
-                    placeholder="Type your answer..."
-                    className="mt-1"
-                  />
-                )}
-              </div>
-            ))}
+                    {(q.type === "sentence_completion" || q.type === "summary_completion" || q.type === "table_completion" || q.type === "diagram_completion" || q.type === "short_answer" || q.type === "flow_chart_completion") && (
+                      <Input
+                        value={answers[q.number] || ""}
+                        onChange={(e) => setAnswer(q.number, e.target.value)}
+                        placeholder="Type your answer..."
+                        className="mt-1"
+                      />
+                    )}
+                  </div>
+                </div>
+              );
+            })}
 
             {/* Section navigation */}
             <div className="flex justify-between pt-4">
