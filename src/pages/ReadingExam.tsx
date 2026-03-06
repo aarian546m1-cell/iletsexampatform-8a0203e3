@@ -100,6 +100,37 @@ export default function ReadingExam() {
     setAnswers((prev) => ({ ...prev, [qNum]: value }));
   };
 
+  const getInstructionText = (type: string): string => {
+    switch (type) {
+      case "matching_headings":
+        return "Choose the correct heading for each paragraph from the list of headings below.";
+      case "true_false_not_given":
+        return "Do the following statements agree with the information given in the passage? Write TRUE, FALSE or NOT GIVEN.";
+      case "yes_no_not_given":
+        return "Do the following statements agree with the views/claims of the writer? Write YES, NO or NOT GIVEN.";
+      case "multiple_choice":
+        return "Choose the correct letter, A, B, C or D.";
+      case "matching_information":
+        return "Which paragraph contains the following information? Write the correct letter.";
+      case "matching_features":
+        return "Match each statement with the correct person/feature from the list below.";
+      case "sentence_completion":
+        return "Complete the sentences below. Write NO MORE THAN TWO WORDS from the passage for each answer.";
+      case "summary_completion":
+        return "Complete the summary below. Choose NO MORE THAN TWO WORDS from the passage for each answer.";
+      case "table_completion":
+        return "Complete the table below. Write NO MORE THAN TWO WORDS from the passage for each answer.";
+      case "diagram_completion":
+        return "Label the diagram below. Write NO MORE THAN TWO WORDS for each answer.";
+      case "short_answer":
+        return "Answer the questions below. Write NO MORE THAN THREE WORDS for each answer.";
+      case "flow_chart_completion":
+        return "Complete the flow chart below. Write NO MORE THAN TWO WORDS for each answer.";
+      default:
+        return "";
+    }
+  };
+
   if (!test) {
     return (
       <div className="flex h-screen items-center justify-center bg-background">
