@@ -210,8 +210,10 @@ export default function ListeningExam() {
           if (nextSection < (test?.sections.length || 0)) {
             setActiveSection(nextSection);
             setCurrentSegmentIndex(0);
-            // Small delay between sections
-            setTimeout(() => playSegment(nextSection, 0), 2000);
+            setIsPlaying(false);
+            // Show prep countdown for next section
+            setPhase("section_prep");
+            setPrepCountdown(PREP_SECONDS);
           } else {
             // All sections done - enter transfer time
             setIsPlaying(false);
