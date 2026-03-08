@@ -372,6 +372,59 @@ export default function Dashboard() {
           </Card>
         )}
 
+        {/* Weekly Practice Summary */}
+        <Card className="mb-8 animate-fade-in" style={{ animationDelay: "0.28s" }}>
+          <CardHeader className="pb-2">
+            <div className="flex items-center justify-between">
+              <CardTitle className="flex items-center gap-2 font-sans text-base">
+                <Calendar className="h-4 w-4 text-chart-4" />
+                Weekly Practice Summary
+              </CardTitle>
+              <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                <span>{weekTotal} test{weekTotal !== 1 ? "s" : ""} this week</span>
+                <span>{activeDays}/7 active days</span>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-7 gap-2">
+              {weeklyData.map((day) => {
+                const maxBar = Math.max(...weeklyData.map(d => d.total), 1);
+                const height = day.total > 0 ? Math.max(20, (day.total / maxBar) * 100) : 8;
+                const isToday = day.date.toDateString() === new Date().toDateString();
+                return (
+                  <div key={day.label} className="flex flex-col items-center gap-1.5">
+                    <div className="relative flex h-28 w-full items-end justify-center rounded-lg bg-muted/50 p-1">
+                      {day.total > 0 ? (
+                        <div className="flex w-full flex-col items-center gap-0.5" style={{ height: `${height}%` }}>
+                          {day.listening > 0 && <div className="w-full rounded-sm bg-chart-1 transition-all duration-500" style={{ flex: day.listening }} />}
+                          {day.reading > 0 && <div className="w-full rounded-sm bg-chart-2 transition-all duration-500" style={{ flex: day.reading }} />}
+                          {day.writing > 0 && <div className="w-full rounded-sm bg-chart-3 transition-all duration-500" style={{ flex: day.writing }} />}
+                          {day.speaking > 0 && <div className="w-full rounded-sm bg-chart-5 transition-all duration-500" style={{ flex: day.speaking }} />}
+                        </div>
+                      ) : (
+                        <div className="h-1.5 w-6 rounded-full bg-muted" />
+                      )}
+                      {day.total > 0 && (
+                        <span className="absolute top-1 text-[10px] font-bold text-foreground/70">{day.total}</span>
+                      )}
+                    </div>
+                    <span className={`text-[11px] font-medium ${isToday ? "text-primary font-bold" : "text-muted-foreground"}`}>
+                      {day.dayLabel}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+            <div className="mt-3 flex flex-wrap items-center gap-4 text-[11px] text-muted-foreground">
+              <span className="flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-sm bg-chart-1" />Listening</span>
+              <span className="flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-sm bg-chart-2" />Reading</span>
+              <span className="flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-sm bg-chart-3" />Writing</span>
+              <span className="flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-sm bg-chart-5" />Speaking</span>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Quick Start + Recent Results */}
         <div className="grid gap-6 lg:grid-cols-3 animate-fade-in" style={{ animationDelay: "0.3s" }}>
           {/* Quick Start */}
