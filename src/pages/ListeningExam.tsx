@@ -38,8 +38,32 @@ const AUDIO_SECONDS = 30 * 60; // 30 min audio
 const TRANSFER_SECONDS = 10 * 60; // 10 min transfer
 const TOTAL_SECONDS = AUDIO_SECONDS + TRANSFER_SECONDS;
 const WARNING_SECONDS = 5 * 60;
+const PREP_SECONDS = 30; // 30 second preparation time per section
 
-type ExamPhase = "instructions" | "playing" | "transfer" | "finished";
+const SECTION_INSTRUCTIONS = [
+  {
+    title: "Section 1",
+    description: "You will hear a conversation between two people in an everyday social situation.",
+    prompt: "First, you have some time to look at Questions 1 to 10.",
+  },
+  {
+    title: "Section 2",
+    description: "You will hear a monologue about a general topic.",
+    prompt: "First, you have some time to look at Questions 11 to 20.",
+  },
+  {
+    title: "Section 3",
+    description: "You will hear a conversation between up to four people in an educational or training context.",
+    prompt: "First, you have some time to look at Questions 21 to 30.",
+  },
+  {
+    title: "Section 4",
+    description: "You will hear a lecture or talk on an academic subject.",
+    prompt: "First, you have some time to look at Questions 31 to 40.",
+  },
+];
+
+type ExamPhase = "instructions" | "section_prep" | "playing" | "transfer" | "finished";
 
 export default function ListeningExam() {
   const { testId } = useParams();
