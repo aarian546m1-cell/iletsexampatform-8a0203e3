@@ -206,6 +206,16 @@ export default function Dashboard() {
   const gapToTarget = targetBand && overallScore !== null
     ? Math.max(0, targetBand - overallScore)
     : null;
+  const motivationalMessage = useMemo(() => {
+    if (!targetBand || overallScore === null) return null;
+    const gap = targetBand - overallScore;
+    if (gap <= 0) return { emoji: "🏆", text: "Amazing! You've reached your target band score!", color: "text-chart-2" };
+    if (gap <= 0.5) return { emoji: "🔥", text: "Almost there! Just half a band away from your goal!", color: "text-chart-2" };
+    if (gap <= 1.0) return { emoji: "💪", text: "Great progress! You're within 1 band of your target. Keep pushing!", color: "text-chart-1" };
+    if (gap <= 1.5) return { emoji: "📈", text: "You're making solid progress. Stay consistent and you'll get there!", color: "text-chart-4" };
+    if (gap <= 2.0) return { emoji: "🎯", text: "Good start! Focus on your weaker modules to close the gap faster.", color: "text-chart-4" };
+    return { emoji: "🚀", text: "Every expert was once a beginner. Keep practicing daily!", color: "text-muted-foreground" };
+  }, [targetBand, overallScore]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -334,6 +344,16 @@ export default function Dashboard() {
             </div>
           </CardContent>
         </Card>
+
+        {/* Motivational Message */}
+        {motivationalMessage && (
+          <div className="mb-8 animate-fade-in rounded-xl border bg-gradient-to-r from-muted/50 to-muted/30 px-5 py-4" style={{ animationDelay: "0.09s" }}>
+            <p className={`text-sm font-medium ${motivationalMessage.color}`}>
+              <span className="mr-2 text-lg">{motivationalMessage.emoji}</span>
+              {motivationalMessage.text}
+            </p>
+          </div>
+        )}
 
         {/* Stats Strip */}
         <div className="mb-8 grid grid-cols-2 gap-3 sm:grid-cols-4 animate-fade-in" style={{ animationDelay: "0.1s" }}>
