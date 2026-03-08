@@ -9,8 +9,12 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import {
   Headphones, Book, PenLine, Mic, Flame, TrendingUp, Clock, Target,
-  ArrowLeft, Sun, Moon, ChevronRight, Trophy, BarChart3, Activity, Calendar
+  ArrowLeft, Sun, Moon, ChevronRight, Trophy, BarChart3, Activity, Calendar,
+  Goal, Pencil, Check, X
 } from "lucide-react";
+import {
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+} from "@/components/ui/select";
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer,
   LineChart, Line, CartesianGrid, RadarChart, PolarGrid,
