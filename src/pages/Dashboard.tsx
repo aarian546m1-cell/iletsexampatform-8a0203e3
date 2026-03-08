@@ -37,6 +37,8 @@ export default function Dashboard() {
   const [writingResults, setWritingResults] = useState<any[]>([]);
   const [speakingResults, setSpeakingResults] = useState<any[]>([]);
   const [streak, setStreak] = useState({ current_streak: 0, longest_streak: 0 });
+  const [targetBand, setTargetBand] = useState<number | null>(null);
+  const [editingTarget, setEditingTarget] = useState(false);
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
