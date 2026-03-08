@@ -38,8 +38,32 @@ const AUDIO_SECONDS = 30 * 60; // 30 min audio
 const TRANSFER_SECONDS = 10 * 60; // 10 min transfer
 const TOTAL_SECONDS = AUDIO_SECONDS + TRANSFER_SECONDS;
 const WARNING_SECONDS = 5 * 60;
+const PREP_SECONDS = 30; // 30 second preparation time per section
 
-type ExamPhase = "instructions" | "playing" | "transfer" | "finished";
+const SECTION_INSTRUCTIONS = [
+  {
+    title: "Section 1",
+    description: "You will hear a conversation between two people in an everyday social situation.",
+    prompt: "First, you have some time to look at Questions 1 to 10.",
+  },
+  {
+    title: "Section 2",
+    description: "You will hear a monologue about a general topic.",
+    prompt: "First, you have some time to look at Questions 11 to 20.",
+  },
+  {
+    title: "Section 3",
+    description: "You will hear a conversation between up to four people in an educational or training context.",
+    prompt: "First, you have some time to look at Questions 21 to 30.",
+  },
+  {
+    title: "Section 4",
+    description: "You will hear a lecture or talk on an academic subject.",
+    prompt: "First, you have some time to look at Questions 31 to 40.",
+  },
+];
+
+type ExamPhase = "instructions" | "section_prep" | "playing" | "transfer" | "finished";
 
 export default function ListeningExam() {
   const { testId } = useParams();
@@ -54,6 +78,8 @@ export default function ListeningExam() {
   const [showWarning, setShowWarning] = useState(false);
   const [confirmSubmit, setConfirmSubmit] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [prepCountdown, setPrepCountdown] = useState(PREP_SECONDS);
+  const prepTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // Audio state
   const [audioLoading, setAudioLoading] = useState(false);
@@ -137,9 +163,13 @@ export default function ListeningExam() {
 
     setAudioSegments(allSegments);
     setAudioLoading(false);
-    setPhase("playing");
     setActiveSection(0);
     setCurrentSegmentIndex(0);
+    startTimeRef.current = Date.now();
+
+    // Start section prep countdown
+    setPhase("section_prep");
+    setPrepCountdown(PREP_SECONDS);
     startTimeRef.current = Date.now();
 
     // Start timer
@@ -180,8 +210,10 @@ export default function ListeningExam() {
           if (nextSection < (test?.sections.length || 0)) {
             setActiveSection(nextSection);
             setCurrentSegmentIndex(0);
-            // Small delay between sections
-            setTimeout(() => playSegment(nextSection, 0), 2000);
+            setIsPlaying(false);
+            // Show prep countdown for next section
+            setPhase("section_prep");
+            setPrepCountdown(PREP_SECONDS);
           } else {
             // All sections done - enter transfer time
             setIsPlaying(false);
@@ -206,10 +238,27 @@ export default function ListeningExam() {
     [audioSegments, test, practiceMode, toast]
   );
 
+  // Section prep countdown
+  useEffect(() => {
+    if (phase !== "section_prep") return;
+    setPrepCountdown(PREP_SECONDS);
+    prepTimerRef.current = setInterval(() => {
+      setPrepCountdown((prev) => {
+        if (prev <= 1) {
+          clearInterval(prepTimerRef.current!);
+          setPhase("playing");
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+    return () => { if (prepTimerRef.current) clearInterval(prepTimerRef.current); };
+  }, [phase, activeSection]);
+
   // Auto-play when phase changes to playing
   useEffect(() => {
     if (phase === "playing" && audioSegments.length > 0 && !isPlaying) {
-      playSegment(0, 0);
+      playSegment(activeSection, 0);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [phase, audioSegments]);
@@ -267,6 +316,7 @@ export default function ListeningExam() {
   useEffect(() => {
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
+      if (prepTimerRef.current) clearInterval(prepTimerRef.current);
       if (audioRef.current) {
         audioRef.current.pause();
         audioRef.current = null;
@@ -347,6 +397,44 @@ export default function ListeningExam() {
                 </>
               )}
             </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ─── Section Prep Screen ───
+  if (phase === "section_prep") {
+    const instructions = SECTION_INSTRUCTIONS[activeSection];
+    return (
+      <div className="flex min-h-screen flex-col items-center justify-center bg-background px-4">
+        <div className="w-full max-w-3xl space-y-6">
+          <div className="text-center">
+            <Badge variant="secondary" className="mb-4">
+              <Headphones className="mr-1.5 h-3 w-3" />
+              {instructions.title}
+            </Badge>
+            <h2 className="text-2xl font-bold mb-4">{instructions.description}</h2>
+            <p className="text-lg text-muted-foreground mb-6">{instructions.prompt}</p>
+            
+            <div className="mt-8 rounded-lg border-2 border-chart-1/20 bg-chart-1/5 p-8">
+              <p className="text-sm font-medium text-muted-foreground mb-3">
+                You now have 30 seconds to look at the questions.
+              </p>
+              <div className="flex h-32 w-32 mx-auto items-center justify-center rounded-full border-4 border-chart-1 bg-background">
+                <span className="font-serif text-5xl font-bold text-chart-1">
+                  {prepCountdown}
+                </span>
+              </div>
+              <p className="text-xs text-muted-foreground mt-4">
+                Audio will start automatically when the countdown finishes
+              </p>
+            </div>
+
+            <div className="mt-6 rounded-lg border bg-card p-4">
+              <h4 className="font-semibold text-sm mb-2">Questions {section.questions[0].number}–{section.questions[section.questions.length - 1].number}</h4>
+              <p className="text-xs text-muted-foreground">{section.title}</p>
+            </div>
           </div>
         </div>
       </div>
