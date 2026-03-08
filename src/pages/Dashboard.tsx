@@ -9,8 +9,12 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import {
   Headphones, Book, PenLine, Mic, Flame, TrendingUp, Clock, Target,
-  ArrowLeft, Sun, Moon, ChevronRight, Trophy, BarChart3, Activity, Calendar
+  ArrowLeft, Sun, Moon, ChevronRight, Trophy, BarChart3, Activity, Calendar,
+  Goal, Pencil, Check, X
 } from "lucide-react";
+import {
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+} from "@/components/ui/select";
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer,
   LineChart, Line, CartesianGrid, RadarChart, PolarGrid,
@@ -33,6 +37,8 @@ export default function Dashboard() {
   const [writingResults, setWritingResults] = useState<any[]>([]);
   const [speakingResults, setSpeakingResults] = useState<any[]>([]);
   const [streak, setStreak] = useState({ current_streak: 0, longest_streak: 0 });
+  const [targetBand, setTargetBand] = useState<number | null>(null);
+  const [editingTarget, setEditingTarget] = useState(false);
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
@@ -42,11 +48,13 @@ export default function Dashboard() {
       supabase.from("writing_submissions").select("*").eq("user_id", user.id).not("band_score", "is", null).order("completed_at", { ascending: false }).limit(50),
       supabase.from("speaking_recordings").select("*").eq("user_id", user.id).not("band_score", "is", null).order("completed_at", { ascending: false }).limit(50),
       supabase.from("daily_streaks").select("*").eq("user_id", user.id).maybeSingle(),
-    ]).then(([r1, r2, r3, r4]) => {
+      supabase.from("profiles").select("target_band").eq("user_id", user.id).maybeSingle(),
+    ]).then(([r1, r2, r3, r4, r5]) => {
       if (r1.data) setResults(r1.data);
       if (r2.data) setWritingResults(r2.data);
       if (r3.data) setSpeakingResults(r3.data);
       if (r4.data) setStreak(r4.data);
+      if (r5.data?.target_band) setTargetBand(Number(r5.data.target_band));
       setLoaded(true);
     });
   }, [user]);
@@ -175,6 +183,30 @@ export default function Dashboard() {
     return "text-destructive";
   };
 
+  const BAND_OPTIONS = [4.0, 4.5, 5.0, 5.5, 6.0, 6.5, 7.0, 7.5, 8.0, 8.5, 9.0];
+
+  const saveTargetBand = async (band: number) => {
+    if (!user) return;
+    setTargetBand(band);
+    setEditingTarget(false);
+    await supabase.from("profiles").update({ target_band: band } as any).eq("user_id", user.id);
+  };
+
+  const clearTargetBand = async () => {
+    if (!user) return;
+    setTargetBand(null);
+    setEditingTarget(false);
+    await supabase.from("profiles").update({ target_band: null } as any).eq("user_id", user.id);
+  };
+
+  const progressToTarget = targetBand && overallScore !== null
+    ? Math.min(100, Math.round((overallScore / targetBand) * 100))
+    : null;
+
+  const gapToTarget = targetBand && overallScore !== null
+    ? Math.max(0, targetBand - overallScore)
+    : null;
+
   return (
     <div className="min-h-screen bg-background">
       {/* Custom Dashboard Header */}
@@ -236,6 +268,72 @@ export default function Dashboard() {
             </div>
           </div>
         </div>
+
+        {/* Target Band Score Card */}
+        <Card className="mb-8 animate-fade-in overflow-hidden" style={{ animationDelay: "0.08s" }}>
+          <CardContent className="p-5">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex items-center gap-3">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-chart-4/10 text-chart-4">
+                  <Goal className="h-5 w-5" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium">Target Band Score</p>
+                  {targetBand && !editingTarget ? (
+                    <div className="flex items-center gap-2 mt-0.5">
+                      <span className="font-serif text-2xl font-bold text-chart-4">{targetBand.toFixed(1)}</span>
+                      <button onClick={() => setEditingTarget(true)} className="text-muted-foreground hover:text-foreground transition-colors">
+                        <Pencil className="h-3.5 w-3.5" />
+                      </button>
+                    </div>
+                  ) : (
+                    <p className="text-xs text-muted-foreground">Set your goal to track progress</p>
+                  )}
+                </div>
+              </div>
+
+              {/* Editor / Progress */}
+              {editingTarget || !targetBand ? (
+                <div className="flex items-center gap-2">
+                  <Select onValueChange={(v) => saveTargetBand(Number(v))} defaultValue={targetBand?.toString()}>
+                    <SelectTrigger className="w-28 h-9">
+                      <SelectValue placeholder="Select" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {BAND_OPTIONS.map((b) => (
+                        <SelectItem key={b} value={b.toString()}>{b.toFixed(1)}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  {targetBand && (
+                    <Button variant="ghost" size="icon" className="h-9 w-9" onClick={() => setEditingTarget(false)}>
+                      <X className="h-4 w-4" />
+                    </Button>
+                  )}
+                </div>
+              ) : progressToTarget !== null ? (
+                <div className="flex-1 max-w-xs">
+                  <div className="flex items-center justify-between text-xs mb-1.5">
+                    <span className="text-muted-foreground">
+                      {overallScore!.toFixed(1)} → {targetBand.toFixed(1)}
+                    </span>
+                    <span className={`font-bold ${progressToTarget >= 100 ? "text-chart-2" : "text-chart-4"}`}>
+                      {progressToTarget >= 100 ? "🎉 Goal reached!" : `${gapToTarget!.toFixed(1)} to go`}
+                    </span>
+                  </div>
+                  <div className="relative h-3 w-full overflow-hidden rounded-full bg-muted">
+                    <div
+                      className={`h-full rounded-full transition-all duration-700 ${progressToTarget >= 100 ? "bg-chart-2" : "bg-chart-4"}`}
+                      style={{ width: `${progressToTarget}%` }}
+                    />
+                  </div>
+                </div>
+              ) : (
+                <p className="text-xs text-muted-foreground">Complete tests to see progress</p>
+              )}
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Stats Strip */}
         <div className="mb-8 grid grid-cols-2 gap-3 sm:grid-cols-4 animate-fade-in" style={{ animationDelay: "0.1s" }}>
