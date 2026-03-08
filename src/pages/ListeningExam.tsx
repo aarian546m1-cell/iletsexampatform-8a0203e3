@@ -78,6 +78,8 @@ export default function ListeningExam() {
   const [showWarning, setShowWarning] = useState(false);
   const [confirmSubmit, setConfirmSubmit] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [prepCountdown, setPrepCountdown] = useState(PREP_SECONDS);
+  const prepTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // Audio state
   const [audioLoading, setAudioLoading] = useState(false);
