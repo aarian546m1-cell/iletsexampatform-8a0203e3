@@ -1,236 +1,410 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import Header from "@/components/Header";
+import { useTheme } from "@/hooks/use-theme";
 import Footer from "@/components/Footer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Headphones, Book, PenLine, Mic, Flame, TrendingUp, Clock, Target, AlertCircle } from "lucide-react";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
+import { Progress } from "@/components/ui/progress";
+import {
+  Headphones, Book, PenLine, Mic, Flame, TrendingUp, Clock, Target,
+  ArrowLeft, Sun, Moon, ChevronRight, Trophy, BarChart3, Activity
+} from "lucide-react";
+import {
+  BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer,
+  LineChart, Line, CartesianGrid, RadarChart, PolarGrid,
+  PolarAngleAxis, PolarRadiusAxis, Radar, Legend
+} from "recharts";
 
 type ModuleKey = "listening" | "reading" | "writing" | "speaking";
 
-const MODULE_META: Record<ModuleKey, { icon: typeof Headphones; color: string }> = {
-  listening: { icon: Headphones, color: "bg-chart-1/10 text-chart-1" },
-  reading: { icon: Book, color: "bg-chart-2/10 text-chart-2" },
-  writing: { icon: PenLine, color: "bg-chart-3/10 text-chart-3" },
-  speaking: { icon: Mic, color: "bg-chart-5/10 text-chart-5" },
+const MODULE_META: Record<ModuleKey, { icon: typeof Headphones; label: string; color: string; gradient: string; to: string }> = {
+  listening: { icon: Headphones, label: "Listening", color: "text-chart-1", gradient: "from-[hsl(215,90%,42%)] to-[hsl(215,85%,55%)]", to: "/listening-tests" },
+  reading: { icon: Book, label: "Reading", color: "text-chart-2", gradient: "from-[hsl(152,60%,40%)] to-[hsl(152,50%,50%)]", to: "/reading-tests" },
+  writing: { icon: PenLine, label: "Writing", color: "text-chart-3", gradient: "from-[hsl(350,80%,55%)] to-[hsl(350,70%,65%)]", to: "/writing-tests" },
+  speaking: { icon: Mic, label: "Speaking", color: "text-chart-5", gradient: "from-[hsl(270,60%,55%)] to-[hsl(270,50%,65%)]", to: "/speaking-tests" },
 };
 
 export default function Dashboard() {
   const { user, profile } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const [results, setResults] = useState<any[]>([]);
   const [writingResults, setWritingResults] = useState<any[]>([]);
   const [speakingResults, setSpeakingResults] = useState<any[]>([]);
   const [streak, setStreak] = useState({ current_streak: 0, longest_streak: 0 });
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     if (!user) return;
-    supabase.from("test_results").select("*, test_modules(module_type)").eq("user_id", user.id).order("completed_at", { ascending: false }).limit(20)
-      .then(({ data }) => { if (data) setResults(data); });
-    supabase.from("writing_submissions").select("*").eq("user_id", user.id).not("band_score", "is", null).order("completed_at", { ascending: false }).limit(20)
-      .then(({ data }) => { if (data) setWritingResults(data); });
-    supabase.from("speaking_recordings").select("*").eq("user_id", user.id).not("band_score", "is", null).order("completed_at", { ascending: false }).limit(20)
-      .then(({ data }) => { if (data) setSpeakingResults(data); });
-    supabase.from("daily_streaks").select("*").eq("user_id", user.id).maybeSingle()
-      .then(({ data }) => { if (data) setStreak(data); });
+    Promise.all([
+      supabase.from("test_results").select("*, test_modules(module_type)").eq("user_id", user.id).order("completed_at", { ascending: false }).limit(50),
+      supabase.from("writing_submissions").select("*").eq("user_id", user.id).not("band_score", "is", null).order("completed_at", { ascending: false }).limit(50),
+      supabase.from("speaking_recordings").select("*").eq("user_id", user.id).not("band_score", "is", null).order("completed_at", { ascending: false }).limit(50),
+      supabase.from("daily_streaks").select("*").eq("user_id", user.id).maybeSingle(),
+    ]).then(([r1, r2, r3, r4]) => {
+      if (r1.data) setResults(r1.data);
+      if (r2.data) setWritingResults(r2.data);
+      if (r3.data) setSpeakingResults(r3.data);
+      if (r4.data) setStreak(r4.data);
+      setLoaded(true);
+    });
   }, [user]);
 
-  // Calculate per-module best/latest scores
-  const moduleScores: Record<ModuleKey, number | null> = {
-    listening: null,
-    reading: null,
-    writing: null,
-    speaking: null,
-  };
-
-  // From test_results (listening, reading, speaking)
-  for (const r of results) {
-    const modType = r.test_modules?.module_type as ModuleKey | undefined;
-    if (modType && modType !== "writing" && moduleScores[modType] === null) {
-      moduleScores[modType] = Number(r.band_score);
+  // Per-module latest scores
+  const moduleScores: Record<ModuleKey, number | null> = useMemo(() => {
+    const scores: Record<ModuleKey, number | null> = { listening: null, reading: null, writing: null, speaking: null };
+    for (const r of results) {
+      const mod = r.test_modules?.module_type as ModuleKey | undefined;
+      if (mod && mod !== "writing" && mod !== "speaking" && scores[mod] === null) scores[mod] = Number(r.band_score);
     }
-  }
+    if (writingResults.length > 0) scores.writing = Number(writingResults[0].band_score);
+    if (speakingResults.length > 0) scores.speaking = Number(speakingResults[0].band_score);
+    return scores;
+  }, [results, writingResults, speakingResults]);
 
-  // From writing_submissions
-  if (writingResults.length > 0) {
-    moduleScores.writing = Number(writingResults[0].band_score);
-  }
+  // Per-module attempt counts
+  const moduleCounts: Record<ModuleKey, number> = useMemo(() => {
+    const counts: Record<ModuleKey, number> = { listening: 0, reading: 0, writing: 0, speaking: 0 };
+    for (const r of results) {
+      const mod = r.test_modules?.module_type as ModuleKey | undefined;
+      if (mod && mod in counts) counts[mod]++;
+    }
+    counts.writing = writingResults.length;
+    counts.speaking = speakingResults.length;
+    return counts;
+  }, [results, writingResults, speakingResults]);
 
-  // From speaking_recordings
-  if (speakingResults.length > 0) {
-    moduleScores.speaking = Number(speakingResults[0].band_score);
-  }
+  // Per-module best scores
+  const moduleBest: Record<ModuleKey, number | null> = useMemo(() => {
+    const best: Record<ModuleKey, number | null> = { listening: null, reading: null, writing: null, speaking: null };
+    for (const r of results) {
+      const mod = r.test_modules?.module_type as ModuleKey | undefined;
+      if (mod && mod in best) {
+        const s = Number(r.band_score);
+        if (best[mod] === null || s > best[mod]!) best[mod] = s;
+      }
+    }
+    for (const r of writingResults) { const s = Number(r.band_score); if (best.writing === null || s > best.writing!) best.writing = s; }
+    for (const r of speakingResults) { const s = Number(r.band_score); if (best.speaking === null || s > best.speaking!) best.speaking = s; }
+    return best;
+  }, [results, writingResults, speakingResults]);
 
   const completedModules = (Object.entries(moduleScores) as [ModuleKey, number | null][]).filter(([, v]) => v !== null);
-  const completedCount = completedModules.length;
+  const overallScore = completedModules.length >= 2
+    ? Math.round(completedModules.reduce((a, [, v]) => a + v!, 0) / completedModules.length * 2) / 2
+    : null;
 
-  let overallLabel = "";
-  let overallScore: number | null = null;
-  let overallMessage = "";
+  const totalTests = moduleCounts.listening + moduleCounts.reading + moduleCounts.writing + moduleCounts.speaking;
 
-  if (completedCount === 4) {
-    overallScore = Math.round(completedModules.reduce((a, [, v]) => a + v!, 0) / 4 * 2) / 2;
-    overallLabel = "Overall Band Score";
-  } else if (completedCount >= 2) {
-    overallScore = Math.round(completedModules.reduce((a, [, v]) => a + v!, 0) / completedCount * 2) / 2;
-    overallLabel = "Current Average Band (Based on Completed Modules)";
-  } else if (completedCount === 1) {
-    overallMessage = "Complete all four modules to generate overall band score.";
-  } else {
-    overallMessage = "No scores yet. Start practicing to see your band scores.";
-  }
+  // Trend data (last scores over time per module)
+  const trendData = useMemo(() => {
+    const all = [
+      ...results.map(r => ({ date: r.completed_at, mod: r.test_modules?.module_type as string, score: Number(r.band_score) })),
+      ...writingResults.map(r => ({ date: r.completed_at, mod: "writing", score: Number(r.band_score) })),
+      ...speakingResults.map(r => ({ date: r.completed_at, mod: "speaking", score: Number(r.band_score) })),
+    ].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
-  const chartData = (["listening", "reading", "writing", "speaking"] as ModuleKey[]).map((mod) => ({
-    module: mod.charAt(0).toUpperCase() + mod.slice(1),
+    const grouped: Record<string, any> = {};
+    for (const item of all) {
+      const key = new Date(item.date).toLocaleDateString("en-US", { month: "short", day: "numeric" });
+      if (!grouped[key]) grouped[key] = { date: key };
+      grouped[key][item.mod] = item.score;
+    }
+    return Object.values(grouped).slice(-10);
+  }, [results, writingResults, speakingResults]);
+
+  // Radar data
+  const radarData = (["listening", "reading", "writing", "speaking"] as ModuleKey[]).map(mod => ({
+    module: MODULE_META[mod].label,
     score: moduleScores[mod] ?? 0,
+    best: moduleBest[mod] ?? 0,
   }));
 
-  const allResults = [
-    ...results.map((r) => ({ id: r.id, band: Number(r.band_score), detail: `${r.raw_score}/${r.total_questions} correct`, date: r.completed_at, type: r.test_modules?.module_type })),
-    ...writingResults.map((r) => ({ id: r.id, band: Number(r.band_score), detail: `Task 1: ${r.word_count_task1 || 0}w • Task 2: ${r.word_count_task2 || 0}w`, date: r.completed_at, type: "writing" })),
-    ...speakingResults.map((r) => ({ id: r.id, band: Number(r.band_score), detail: `F:${Number(r.fluency_score || 0).toFixed(1)} V:${Number(r.vocabulary_score || 0).toFixed(1)} G:${Number(r.grammar_score || 0).toFixed(1)} P:${Number(r.pronunciation_score || 0).toFixed(1)}`, date: r.completed_at, type: "speaking" })),
-  ].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 10);
+  // Bar chart data
+  const barData = (["listening", "reading", "writing", "speaking"] as ModuleKey[]).map(mod => ({
+    module: MODULE_META[mod].label,
+    latest: moduleScores[mod] ?? 0,
+    best: moduleBest[mod] ?? 0,
+  }));
 
-  const quickStart = [
-    { icon: Headphones, label: "Listening", to: "/listening-tests", color: "bg-chart-1/10 text-chart-1" },
-    { icon: Book, label: "Reading", to: "/reading-tests", color: "bg-chart-2/10 text-chart-2" },
-    { icon: PenLine, label: "Writing", to: "/writing-tests", color: "bg-chart-3/10 text-chart-3" },
-    { icon: Mic, label: "Speaking", to: "/speaking-tests", color: "bg-chart-5/10 text-chart-5" },
-  ];
+  // Recent results
+  const recentResults = useMemo(() => [
+    ...results.map(r => ({ id: r.id, band: Number(r.band_score), detail: `${r.raw_score}/${r.total_questions} correct`, date: r.completed_at, type: r.test_modules?.module_type as string })),
+    ...writingResults.map(r => ({ id: r.id, band: Number(r.band_score), detail: `Task 1: ${r.word_count_task1 || 0}w • Task 2: ${r.word_count_task2 || 0}w`, date: r.completed_at, type: "writing" })),
+    ...speakingResults.map(r => ({ id: r.id, band: Number(r.band_score), detail: `F:${Number(r.fluency_score || 0).toFixed(1)} V:${Number(r.vocabulary_score || 0).toFixed(1)} G:${Number(r.grammar_score || 0).toFixed(1)} P:${Number(r.pronunciation_score || 0).toFixed(1)}`, date: r.completed_at, type: "speaking" })),
+  ].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 8), [results, writingResults, speakingResults]);
+
+  const getBandColor = (band: number) => {
+    if (band >= 7) return "text-chart-2";
+    if (band >= 5.5) return "text-chart-1";
+    if (band >= 4) return "text-warning";
+    return "text-destructive";
+  };
 
   return (
     <div className="min-h-screen bg-background">
-      <Header />
+      {/* Custom Dashboard Header */}
+      <header className="sticky top-0 z-50 border-b bg-card/80 backdrop-blur-lg">
+        <div className="container flex h-16 items-center justify-between">
+          <Link to="/" className="group flex items-center gap-2.5 transition-all duration-200 hover:opacity-80">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary transition-transform duration-200 group-hover:-translate-x-0.5">
+              <ArrowLeft className="h-4 w-4 text-primary-foreground" />
+            </div>
+            <span className="font-serif text-xl font-bold">IELTS Pro</span>
+          </Link>
+          <div className="flex items-center gap-3">
+            <Button variant="ghost" size="icon" onClick={toggleTheme} className="h-9 w-9 transition-transform duration-200 hover:scale-110">
+              {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+            </Button>
+          </div>
+        </div>
+      </header>
+
       <div className="container py-8">
-        <div className="mb-8">
-          <h1 className="text-3xl md:text-4xl">Welcome back, {profile?.display_name || "Student"}!</h1>
-          <p className="mt-2 text-muted-foreground">Track your progress and continue practicing.</p>
+        {/* Welcome + Overall Band Hero */}
+        <div className="mb-8 animate-fade-in">
+          <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary/10 via-card to-chart-5/5 border p-6 md:p-8">
+            <div className="absolute -right-8 -top-8 h-40 w-40 rounded-full bg-primary/5 blur-3xl" />
+            <div className="absolute -bottom-10 -left-10 h-32 w-32 rounded-full bg-chart-5/5 blur-3xl" />
+            <div className="relative flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">Welcome back</p>
+                <h1 className="mt-1 font-serif text-3xl font-bold md:text-4xl">{profile?.display_name || "Student"}</h1>
+                <p className="mt-2 text-muted-foreground">
+                  {totalTests > 0
+                    ? `You've completed ${totalTests} test${totalTests > 1 ? "s" : ""} so far. Keep going!`
+                    : "Start practicing to see your progress here."}
+                </p>
+              </div>
+
+              {/* Overall Band Score Circle */}
+              <div className="flex flex-col items-center">
+                <div className="relative flex h-32 w-32 items-center justify-center rounded-full border-4 border-primary/20 bg-card shadow-lg transition-transform duration-300 hover:scale-105">
+                  <div className="absolute inset-1 rounded-full border-2 border-dashed border-primary/10" />
+                  {overallScore !== null ? (
+                    <div className="text-center">
+                      <p className={`font-serif text-4xl font-bold ${getBandColor(overallScore)}`}>{overallScore.toFixed(1)}</p>
+                      <p className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground">Overall</p>
+                    </div>
+                  ) : (
+                    <div className="text-center px-3">
+                      <Target className="mx-auto h-6 w-6 text-muted-foreground/50" />
+                      <p className="mt-1 text-[10px] text-muted-foreground">Take tests to see score</p>
+                    </div>
+                  )}
+                </div>
+                {completedModules.length > 0 && completedModules.length < 4 && (
+                  <p className="mt-2 text-xs text-muted-foreground">
+                    Based on {completedModules.length}/4 modules
+                  </p>
+                )}
+              </div>
+            </div>
+          </div>
         </div>
 
-        {/* Band Score Summary */}
-        <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {(["listening", "reading", "writing", "speaking"] as ModuleKey[]).map((mod) => {
-            const Icon = MODULE_META[mod].icon;
+        {/* Stats Strip */}
+        <div className="mb-8 grid grid-cols-2 gap-3 sm:grid-cols-4 animate-fade-in" style={{ animationDelay: "0.1s" }}>
+          {[
+            { icon: Activity, label: "Tests Taken", value: totalTests, color: "text-chart-1" },
+            { icon: Flame, label: "Day Streak", value: streak.current_streak, color: "text-accent" },
+            { icon: Trophy, label: "Best Streak", value: streak.longest_streak, color: "text-warning" },
+            { icon: TrendingUp, label: "Modules Done", value: completedModules.length, color: "text-chart-2" },
+          ].map((stat) => (
+            <Card key={stat.label} className="transition-all duration-200 hover:shadow-md hover:-translate-y-0.5">
+              <CardContent className="flex items-center gap-3 p-4">
+                <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-muted ${stat.color}`}>
+                  <stat.icon className="h-5 w-5" />
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground">{stat.label}</p>
+                  <p className="text-xl font-bold">{stat.value}</p>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
+        {/* Module Score Cards */}
+        <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4 animate-fade-in" style={{ animationDelay: "0.15s" }}>
+          {(["listening", "reading", "writing", "speaking"] as ModuleKey[]).map((mod, i) => {
+            const meta = MODULE_META[mod];
+            const Icon = meta.icon;
             const score = moduleScores[mod];
+            const best = moduleBest[mod];
+            const count = moduleCounts[mod];
             return (
-              <Card key={mod}>
-                <CardContent className="flex items-center gap-4 p-5">
-                  <div className={`flex h-12 w-12 items-center justify-center rounded-xl ${MODULE_META[mod].color}`}>
-                    <Icon className="h-6 w-6" />
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">{mod.charAt(0).toUpperCase() + mod.slice(1)}</p>
-                    <p className="text-2xl font-bold">{score !== null ? score.toFixed(1) : "—"}</p>
-                    {score === null && <p className="text-xs text-muted-foreground">Not Attempted</p>}
-                  </div>
-                </CardContent>
-              </Card>
+              <Link key={mod} to={meta.to}>
+                <Card className="group relative overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1 cursor-pointer">
+                  <div className={`absolute inset-0 bg-gradient-to-br ${meta.gradient} opacity-0 transition-opacity duration-300 group-hover:opacity-5`} />
+                  <CardContent className="relative p-5">
+                    <div className="flex items-center justify-between mb-3">
+                      <div className={`flex h-11 w-11 items-center justify-center rounded-xl bg-muted ${meta.color} transition-transform duration-200 group-hover:scale-110`}>
+                        <Icon className="h-5 w-5" />
+                      </div>
+                      <ChevronRight className="h-4 w-4 text-muted-foreground opacity-0 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0.5" />
+                    </div>
+                    <p className="text-sm font-medium text-muted-foreground">{meta.label}</p>
+                    <p className={`mt-1 text-3xl font-bold ${score !== null ? getBandColor(score) : "text-muted-foreground/30"}`}>
+                      {score !== null ? score.toFixed(1) : "—"}
+                    </p>
+                    <div className="mt-3 flex items-center justify-between text-xs text-muted-foreground">
+                      <span>{count} attempt{count !== 1 ? "s" : ""}</span>
+                      {best !== null && <span>Best: {best.toFixed(1)}</span>}
+                    </div>
+                    {count > 0 && (
+                      <Progress value={(score ?? 0) / 9 * 100} className="mt-2 h-1.5" />
+                    )}
+                  </CardContent>
+                </Card>
+              </Link>
             );
           })}
         </div>
 
-        {/* Overall Band */}
-        <Card className="mb-8">
-          <CardContent className="p-6">
-            {overallScore !== null ? (
-              <div className="flex items-center gap-6">
-                <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10">
-                  <Target className="h-8 w-8 text-primary" />
-                </div>
-                <div>
-                  <p className="text-sm text-muted-foreground">{overallLabel}</p>
-                  <p className="font-serif text-4xl font-bold text-primary">{overallScore.toFixed(1)}</p>
-                </div>
-              </div>
-            ) : (
-              <div className="flex items-center gap-4">
-                <AlertCircle className="h-5 w-5 text-muted-foreground" />
-                <p className="text-muted-foreground">{overallMessage}</p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-
-        {/* Stats Row */}
-        <div className="mb-8 grid gap-4 sm:grid-cols-3">
-          <Card>
-            <CardContent className="flex items-center gap-4 p-5">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-accent/10 text-accent"><Flame className="h-6 w-6" /></div>
-              <div><p className="text-sm text-muted-foreground">Day Streak</p><p className="text-2xl font-bold">{streak.current_streak}</p></div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="flex items-center gap-4 p-5">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-success/10 text-success"><TrendingUp className="h-6 w-6" /></div>
-              <div><p className="text-sm text-muted-foreground">Tests Taken</p><p className="text-2xl font-bold">{results.length + writingResults.length + speakingResults.length}</p></div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="flex items-center gap-4 p-5">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-warning/10 text-warning"><Clock className="h-6 w-6" /></div>
-              <div><p className="text-sm text-muted-foreground">Best Streak</p><p className="text-2xl font-bold">{streak.longest_streak}</p></div>
-            </CardContent>
-          </Card>
-        </div>
-
-        <div className="grid gap-6 lg:grid-cols-3">
-          {/* Chart */}
-          <Card className="lg:col-span-2">
-            <CardHeader><CardTitle className="font-sans text-lg">Module Scores</CardTitle></CardHeader>
+        {/* Charts Row */}
+        <div className="mb-8 grid gap-6 lg:grid-cols-3 animate-fade-in" style={{ animationDelay: "0.2s" }}>
+          {/* Bar Chart */}
+          <Card className="lg:col-span-2 transition-shadow duration-200 hover:shadow-md">
+            <CardHeader className="pb-2">
+              <CardTitle className="flex items-center gap-2 font-sans text-base">
+                <BarChart3 className="h-4 w-4 text-primary" />
+                Module Scores
+              </CardTitle>
+            </CardHeader>
             <CardContent>
-              <ResponsiveContainer width="100%" height={250}>
-                <BarChart data={chartData}>
-                  <XAxis dataKey="module" tick={{ fontSize: 12 }} />
-                  <YAxis domain={[0, 9]} tick={{ fontSize: 12 }} />
-                  <Tooltip />
-                  <Bar dataKey="score" fill="hsl(var(--primary))" radius={[6, 6, 0, 0]} />
+              <ResponsiveContainer width="100%" height={260}>
+                <BarChart data={barData} barGap={4}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                  <XAxis dataKey="module" tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }} />
+                  <YAxis domain={[0, 9]} tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }} />
+                  <Tooltip
+                    contentStyle={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--border))", borderRadius: "8px", fontSize: 12 }}
+                  />
+                  <Bar dataKey="latest" name="Latest" fill="hsl(var(--primary))" radius={[6, 6, 0, 0]} />
+                  <Bar dataKey="best" name="Best" fill="hsl(var(--chart-2))" radius={[6, 6, 0, 0]} opacity={0.6} />
+                  <Legend wrapperStyle={{ fontSize: 12 }} />
                 </BarChart>
               </ResponsiveContainer>
             </CardContent>
           </Card>
 
-          {/* Quick Start */}
-          <Card>
-            <CardHeader><CardTitle className="font-sans text-lg">Quick Start</CardTitle></CardHeader>
-            <CardContent className="space-y-3">
-              {quickStart.map((q) => (
-                <Link key={q.label} to={q.to}>
-                  <Button variant="outline" className="w-full justify-start gap-3">
-                    <div className={`flex h-8 w-8 items-center justify-center rounded-lg ${q.color}`}>
-                      <q.icon className="h-4 w-4" />
-                    </div>
-                    Practice {q.label}
-                  </Button>
-                </Link>
-              ))}
+          {/* Radar Chart */}
+          <Card className="transition-shadow duration-200 hover:shadow-md">
+            <CardHeader className="pb-2">
+              <CardTitle className="flex items-center gap-2 font-sans text-base">
+                <Target className="h-4 w-4 text-chart-5" />
+                Skills Overview
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ResponsiveContainer width="100%" height={260}>
+                <RadarChart data={radarData}>
+                  <PolarGrid stroke="hsl(var(--border))" />
+                  <PolarAngleAxis dataKey="module" tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }} />
+                  <PolarRadiusAxis domain={[0, 9]} tick={{ fontSize: 10, fill: "hsl(var(--muted-foreground))" }} />
+                  <Radar name="Latest" dataKey="score" stroke="hsl(var(--primary))" fill="hsl(var(--primary))" fillOpacity={0.2} />
+                  <Radar name="Best" dataKey="best" stroke="hsl(var(--chart-2))" fill="hsl(var(--chart-2))" fillOpacity={0.1} />
+                </RadarChart>
+              </ResponsiveContainer>
             </CardContent>
           </Card>
         </div>
 
-        {/* Recent Results */}
-        {allResults.length > 0 && (
-          <Card className="mt-6">
-            <CardHeader><CardTitle className="font-sans text-lg">Recent Practice</CardTitle></CardHeader>
+        {/* Trend Line Chart */}
+        {trendData.length > 1 && (
+          <Card className="mb-8 animate-fade-in" style={{ animationDelay: "0.25s" }}>
+            <CardHeader className="pb-2">
+              <CardTitle className="flex items-center gap-2 font-sans text-base">
+                <TrendingUp className="h-4 w-4 text-chart-2" />
+                Score Trend Over Time
+              </CardTitle>
+            </CardHeader>
             <CardContent>
-              <div className="space-y-3">
-                {allResults.map((r) => (
-                  <div key={r.id} className="flex items-center justify-between rounded-lg border p-3">
-                    <div>
-                      <p className="font-medium">
-                        {r.type ? r.type.charAt(0).toUpperCase() + r.type.slice(1) : "Test"} — Band: {r.band.toFixed(1)}
-                      </p>
-                      <p className="text-sm text-muted-foreground">
-                        {r.detail} • {new Date(r.date).toLocaleDateString()}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
+              <ResponsiveContainer width="100%" height={220}>
+                <LineChart data={trendData}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                  <XAxis dataKey="date" tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }} />
+                  <YAxis domain={[0, 9]} tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }} />
+                  <Tooltip contentStyle={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--border))", borderRadius: "8px", fontSize: 12 }} />
+                  <Line type="monotone" dataKey="listening" stroke="hsl(var(--chart-1))" strokeWidth={2} dot={{ r: 3 }} connectNulls />
+                  <Line type="monotone" dataKey="reading" stroke="hsl(var(--chart-2))" strokeWidth={2} dot={{ r: 3 }} connectNulls />
+                  <Line type="monotone" dataKey="writing" stroke="hsl(var(--chart-3))" strokeWidth={2} dot={{ r: 3 }} connectNulls />
+                  <Line type="monotone" dataKey="speaking" stroke="hsl(var(--chart-5))" strokeWidth={2} dot={{ r: 3 }} connectNulls />
+                  <Legend wrapperStyle={{ fontSize: 12 }} />
+                </LineChart>
+              </ResponsiveContainer>
             </CardContent>
           </Card>
         )}
+
+        {/* Quick Start + Recent Results */}
+        <div className="grid gap-6 lg:grid-cols-3 animate-fade-in" style={{ animationDelay: "0.3s" }}>
+          {/* Quick Start */}
+          <Card className="transition-shadow duration-200 hover:shadow-md">
+            <CardHeader className="pb-3">
+              <CardTitle className="font-sans text-base">Quick Start</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-2.5">
+              {(["listening", "reading", "writing", "speaking"] as ModuleKey[]).map((mod) => {
+                const meta = MODULE_META[mod];
+                const Icon = meta.icon;
+                return (
+                  <Link key={mod} to={meta.to}>
+                    <Button variant="outline" className="w-full justify-start gap-3 transition-all duration-200 hover:translate-x-1 hover:shadow-sm">
+                      <div className={`flex h-8 w-8 items-center justify-center rounded-lg bg-muted ${meta.color}`}>
+                        <Icon className="h-4 w-4" />
+                      </div>
+                      Practice {meta.label}
+                      <ChevronRight className="ml-auto h-4 w-4 text-muted-foreground" />
+                    </Button>
+                  </Link>
+                );
+              })}
+            </CardContent>
+          </Card>
+
+          {/* Recent Results */}
+          <Card className="lg:col-span-2 transition-shadow duration-200 hover:shadow-md">
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center gap-2 font-sans text-base">
+                <Clock className="h-4 w-4 text-muted-foreground" />
+                Recent Practice
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              {recentResults.length === 0 ? (
+                <p className="py-8 text-center text-sm text-muted-foreground">No results yet. Start a practice test!</p>
+              ) : (
+                <div className="space-y-2">
+                  {recentResults.map((r) => {
+                    const mod = r.type as ModuleKey;
+                    const meta = MODULE_META[mod] || MODULE_META.listening;
+                    const Icon = meta?.icon || Activity;
+                    return (
+                      <div key={r.id} className="flex items-center gap-3 rounded-lg border p-3 transition-all duration-200 hover:bg-muted/50 hover:shadow-sm">
+                        <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-muted ${meta?.color || ""}`}>
+                          <Icon className="h-4 w-4" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2">
+                            <p className="text-sm font-medium">{meta?.label || "Test"}</p>
+                            <span className={`text-sm font-bold ${getBandColor(r.band)}`}>{r.band.toFixed(1)}</span>
+                          </div>
+                          <p className="text-xs text-muted-foreground truncate">{r.detail}</p>
+                        </div>
+                        <p className="text-xs text-muted-foreground whitespace-nowrap">
+                          {new Date(r.date).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
+                        </p>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </div>
       </div>
       <Footer />
     </div>
