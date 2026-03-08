@@ -403,6 +403,44 @@ export default function ListeningExam() {
     );
   }
 
+  // ─── Section Prep Screen ───
+  if (phase === "section_prep") {
+    const instructions = SECTION_INSTRUCTIONS[activeSection];
+    return (
+      <div className="flex min-h-screen flex-col items-center justify-center bg-background px-4">
+        <div className="w-full max-w-3xl space-y-6">
+          <div className="text-center">
+            <Badge variant="secondary" className="mb-4">
+              <Headphones className="mr-1.5 h-3 w-3" />
+              {instructions.title}
+            </Badge>
+            <h2 className="text-2xl font-bold mb-4">{instructions.description}</h2>
+            <p className="text-lg text-muted-foreground mb-6">{instructions.prompt}</p>
+            
+            <div className="mt-8 rounded-lg border-2 border-chart-1/20 bg-chart-1/5 p-8">
+              <p className="text-sm font-medium text-muted-foreground mb-3">
+                You now have 30 seconds to look at the questions.
+              </p>
+              <div className="flex h-32 w-32 mx-auto items-center justify-center rounded-full border-4 border-chart-1 bg-background">
+                <span className="font-serif text-5xl font-bold text-chart-1">
+                  {prepCountdown}
+                </span>
+              </div>
+              <p className="text-xs text-muted-foreground mt-4">
+                Audio will start automatically when the countdown finishes
+              </p>
+            </div>
+
+            <div className="mt-6 rounded-lg border bg-card p-4">
+              <h4 className="font-semibold text-sm mb-2">Questions {section.questions[0].number}–{section.questions[section.questions.length - 1].number}</h4>
+              <p className="text-xs text-muted-foreground">{section.title}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   // ─── Exam Screen ───
   return (
     <div className="flex h-screen flex-col bg-background">
