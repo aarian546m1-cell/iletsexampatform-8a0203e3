@@ -1520,5 +1520,295 @@ export const SPEAKING_TOPICS: SpeakingTopic[] = [
       "Is it better to study in silence or with background noise?",
       "How can students create an effective study environment at home?"
     ]
+  },
+  {
+    id: 51,
+    title: "Learning from the Internet",
+    part1Questions: [
+      "How often do you use the internet?",
+      "What do you usually do online?",
+      "Do you prefer learning things online or from books?",
+      "Have you ever taken an online course?",
+      "What websites do you visit most frequently?"
+    ],
+    cueCard: {
+      topic: "Describe a time when you learned something from the internet.",
+      points: [
+        "What you learned",
+        "When and where you learned it",
+        "How you found the information",
+        "How long it took you to learn it"
+      ],
+      followUp: "How useful this knowledge has been for you."
+    },
+    part3Questions: [
+      "Do you think the internet is a reliable source of information?",
+      "How has online learning changed traditional education?",
+      "What are the risks of relying too much on the internet for learning?",
+      "Should schools incorporate more internet-based learning into the curriculum?",
+      "Do you think older generations find it harder to learn from the internet?",
+      "How can people distinguish between accurate and misleading information online?"
+    ]
+  },
+  {
+    id: 52,
+    title: "Visiting a Place with Friends",
+    part1Questions: [
+      "How often do you spend time with your friends?",
+      "What activities do you usually do with your friends?",
+      "Do you prefer indoor or outdoor activities with friends?",
+      "Have you and your friends ever travelled together?",
+      "Do you think friendships change as people get older?"
+    ],
+    cueCard: {
+      topic: "Describe a place you visited with your friends.",
+      points: [
+        "Where you went",
+        "When you visited this place",
+        "What you did there",
+        "Who you went with"
+      ],
+      followUp: "Why this visit was memorable for you."
+    },
+    part3Questions: [
+      "Why do people enjoy travelling with friends rather than alone?",
+      "How do shared travel experiences strengthen friendships?",
+      "Do you think group trips are better than solo trips?",
+      "What challenges can arise when travelling in a group?",
+      "How has social media changed the way people plan trips with friends?",
+      "Is it important for friends to have similar interests when travelling together?"
+    ]
+  },
+  {
+    id: 53,
+    title: "A Creative Person",
+    part1Questions: [
+      "Do you consider yourself a creative person?",
+      "What creative activities do you enjoy?",
+      "Did you do any creative subjects at school?",
+      "Do you think creativity is something people are born with?",
+      "How do you express your creativity in daily life?"
+    ],
+    cueCard: {
+      topic: "Describe a person who is very creative.",
+      points: [
+        "Who this person is",
+        "How you know them",
+        "What creative things they do",
+        "What makes them stand out"
+      ],
+      followUp: "How this person's creativity has influenced you."
+    },
+    part3Questions: [
+      "Why is creativity important in today's world?",
+      "Do you think schools do enough to encourage creativity in children?",
+      "Can creativity be taught, or is it a natural talent?",
+      "How does technology influence people's creativity?",
+      "What role does creativity play in the workplace?",
+      "Do you think some cultures value creativity more than others?"
+    ]
+  },
+  {
+    id: 54,
+    title: "Helping a Stranger",
+    part1Questions: [
+      "Do you often help people you don't know?",
+      "What kind of help do you usually offer to strangers?",
+      "Has a stranger ever helped you?",
+      "Do you think people in your country are generally helpful?",
+      "Is it easier to help someone you know or a stranger?"
+    ],
+    cueCard: {
+      topic: "Describe a time when you helped a stranger.",
+      points: [
+        "When and where it happened",
+        "Who the stranger was",
+        "What kind of help you provided",
+        "How the stranger reacted"
+      ],
+      followUp: "How you felt after helping this person."
+    },
+    part3Questions: [
+      "Why do some people hesitate to help strangers?",
+      "Do you think people are less willing to help others nowadays compared to the past?",
+      "Should governments encourage citizens to help each other more?",
+      "How does helping strangers benefit society as a whole?",
+      "Is there a difference between helping someone in an emergency and everyday kindness?",
+      "Do you think volunteering should be part of school education?"
+    ]
+  },
+  {
+    id: 55,
+    title: "A Subject You Enjoyed at School",
+    part1Questions: [
+      "What was your favourite subject at school?",
+      "Did you enjoy going to school when you were young?",
+      "Were there any subjects you didn't like?",
+      "Do you think the subjects you studied at school are useful now?",
+      "How were your teachers at school?"
+    ],
+    cueCard: {
+      topic: "Describe a subject you enjoyed studying at school.",
+      points: [
+        "What the subject was",
+        "When you studied it",
+        "What your teacher was like",
+        "What you learned in this subject"
+      ],
+      followUp: "Why you enjoyed this subject so much."
+    },
+    part3Questions: [
+      "How important is it for students to enjoy the subjects they study?",
+      "Should students be allowed to choose all their own subjects?",
+      "Do you think the school curriculum in your country needs to be updated?",
+      "How do good teachers make a subject more interesting?",
+      "Is it better to be good at many subjects or to specialise in one?",
+      "How has the way subjects are taught changed over the years?"
+    ]
+  },
+  {
+    id: 56,
+    title: "Waiting for Something",
+    part1Questions: [
+      "Are you a patient person?",
+      "What do you usually do while waiting?",
+      "Do you think people today are less patient than before?",
+      "Have you ever had to wait a very long time for something?",
+      "Do you find waiting stressful or relaxing?"
+    ],
+    cueCard: {
+      topic: "Describe a time when you had to wait for something.",
+      points: [
+        "What you were waiting for",
+        "Where you were waiting",
+        "How long you had to wait",
+        "What you did while waiting"
+      ],
+      followUp: "How you felt about the experience of waiting."
+    },
+    part3Questions: [
+      "Why do people find it difficult to wait for things in modern life?",
+      "Has technology made people more or less patient?",
+      "Do you think patience is an important quality to have?",
+      "How do different cultures view waiting and patience?",
+      "What are some effective ways to manage impatience?",
+      "Is instant gratification always a bad thing?"
+    ]
+  },
+  {
+    id: 57,
+    title: "A Piece of Advice",
+    part1Questions: [
+      "Do you often ask others for advice?",
+      "Who do you usually go to for advice?",
+      "Do you think it's important to listen to other people's advice?",
+      "Have you ever given advice to someone?",
+      "Do you prefer advice from friends or family members?"
+    ],
+    cueCard: {
+      topic: "Describe a piece of advice someone gave you.",
+      points: [
+        "Who gave you the advice",
+        "When they gave it to you",
+        "What the advice was about",
+        "Whether you followed the advice"
+      ],
+      followUp: "How this advice has affected your life."
+    },
+    part3Questions: [
+      "Why is it sometimes difficult for people to accept advice?",
+      "Do you think young people should listen to advice from older generations?",
+      "Is professional advice always better than advice from friends?",
+      "How has the internet changed the way people seek advice?",
+      "Should parents give their children more freedom to make their own decisions?",
+      "Do you think people give too much unsolicited advice nowadays?"
+    ]
+  },
+  {
+    id: 58,
+    title: "Trying a New Food",
+    part1Questions: [
+      "What kind of food do you usually eat?",
+      "Do you enjoy trying new foods?",
+      "Are you a good cook?",
+      "What is a popular dish in your country?",
+      "Do you prefer home-cooked meals or eating out?"
+    ],
+    cueCard: {
+      topic: "Describe a time you tried a new food.",
+      points: [
+        "What the food was",
+        "Where and when you tried it",
+        "How you found out about this food",
+        "What it tasted like"
+      ],
+      followUp: "Whether you would like to eat it again."
+    },
+    part3Questions: [
+      "Why are some people unwilling to try new foods?",
+      "How has globalisation affected the food people eat?",
+      "Do you think traditional food culture is disappearing in your country?",
+      "Should children be encouraged to try a variety of foods?",
+      "How do food trends spread in today's world?",
+      "Is it important for people to know where their food comes from?"
+    ]
+  },
+  {
+    id: 59,
+    title: "A Famous Person You'd Like to Meet",
+    part1Questions: [
+      "Do you follow any famous people on social media?",
+      "What kind of famous people do you admire?",
+      "Have you ever met a famous person?",
+      "Do you think fame changes people?",
+      "Are there many famous people from your country?"
+    ],
+    cueCard: {
+      topic: "Describe a famous person you would like to meet.",
+      points: [
+        "Who this person is",
+        "What they are famous for",
+        "How you first learned about them",
+        "What you would like to talk to them about"
+      ],
+      followUp: "Why you would like to meet this particular person."
+    },
+    part3Questions: [
+      "Why are people so fascinated by celebrities?",
+      "Do you think famous people have a responsibility to be good role models?",
+      "How has social media changed the concept of fame?",
+      "Is it healthy for young people to idolise famous people?",
+      "Do you think it is harder to become famous now than in the past?",
+      "What are the advantages and disadvantages of being famous?"
+    ]
+  },
+  {
+    id: 60,
+    title: "Achieving Something Important",
+    part1Questions: [
+      "What goals have you set for yourself recently?",
+      "Do you think setting goals is important?",
+      "How do you celebrate when you achieve something?",
+      "Are you a competitive person?",
+      "Do you prefer working towards short-term or long-term goals?"
+    ],
+    cueCard: {
+      topic: "Describe a time when you achieved something important.",
+      points: [
+        "What you achieved",
+        "When it happened",
+        "How you prepared for it",
+        "Who helped you along the way"
+      ],
+      followUp: "Why this achievement was so meaningful to you."
+    },
+    part3Questions: [
+      "What motivates people to achieve their goals?",
+      "Do you think success is more about talent or hard work?",
+      "How important is it for parents to celebrate their children's achievements?",
+      "Does society put too much pressure on people to be successful?",
+      "How has the definition of success changed over time?",
+      "Do you think failure is necessary for achieving success?"
+    ]
   }
 ];
