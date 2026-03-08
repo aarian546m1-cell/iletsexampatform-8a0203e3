@@ -44,7 +44,7 @@ export default function Header() {
             </div>
             <span className="font-serif text-xl font-bold">IELTS Pro</span>
           </button>
-        )
+        )}
 
         {/* Desktop Nav */}
         <nav className="hidden items-center gap-1 md:flex">
