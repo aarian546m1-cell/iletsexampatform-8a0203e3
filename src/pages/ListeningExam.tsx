@@ -316,6 +316,7 @@ export default function ListeningExam() {
   useEffect(() => {
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
+      if (prepTimerRef.current) clearInterval(prepTimerRef.current);
       if (audioRef.current) {
         audioRef.current.pause();
         audioRef.current = null;
