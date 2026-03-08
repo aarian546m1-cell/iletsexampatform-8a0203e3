@@ -213,4 +213,8 @@ export const LISTENING_TESTS: ListeningTestData[] = [
       },
     ],
   },
+  LISTENING_TEST_2,
+  LISTENING_TEST_3,
+  LISTENING_TEST_4,
+  LISTENING_TEST_5,
 ];
