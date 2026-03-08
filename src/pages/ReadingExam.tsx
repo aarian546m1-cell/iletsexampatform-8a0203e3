@@ -181,7 +181,16 @@ export default function ReadingExam() {
           <Progress value={(answeredCount / totalQuestions) * 100} className="h-1.5 flex-1" />
           <span>{Math.round((secondsLeft / TOTAL_SECONDS) * 100)}% time</span>
         </div>
-        <QuestionNavigator totalQuestions={totalQuestions} answers={answers} />
+        <QuestionNavigator
+          totalQuestions={totalQuestions}
+          answers={answers}
+          sections={test.passages.map((p) => ({
+            start: p.questions[0].number,
+            end: p.questions[p.questions.length - 1].number,
+          }))}
+          activeSection={activeSection}
+          onSectionChange={setActiveSection}
+        />
       </div>
 
       {/* ─── Warning ─── */}
