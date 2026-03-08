@@ -48,11 +48,13 @@ export default function Dashboard() {
       supabase.from("writing_submissions").select("*").eq("user_id", user.id).not("band_score", "is", null).order("completed_at", { ascending: false }).limit(50),
       supabase.from("speaking_recordings").select("*").eq("user_id", user.id).not("band_score", "is", null).order("completed_at", { ascending: false }).limit(50),
       supabase.from("daily_streaks").select("*").eq("user_id", user.id).maybeSingle(),
-    ]).then(([r1, r2, r3, r4]) => {
+      supabase.from("profiles").select("target_band").eq("user_id", user.id).maybeSingle(),
+    ]).then(([r1, r2, r3, r4, r5]) => {
       if (r1.data) setResults(r1.data);
       if (r2.data) setWritingResults(r2.data);
       if (r3.data) setSpeakingResults(r3.data);
       if (r4.data) setStreak(r4.data);
+      if (r5.data?.target_band) setTargetBand(Number(r5.data.target_band));
       setLoaded(true);
     });
   }, [user]);
