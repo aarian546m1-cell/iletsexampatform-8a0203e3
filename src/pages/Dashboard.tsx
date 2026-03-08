@@ -114,6 +114,39 @@ export default function Dashboard() {
     return Object.values(grouped).slice(-10);
   }, [results, writingResults, speakingResults]);
 
+  // Weekly practice data (last 7 days)
+  const weeklyData = useMemo(() => {
+    const days: { date: Date; label: string; dayLabel: string; listening: number; reading: number; writing: number; speaking: number; total: number }[] = [];
+    const now = new Date();
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date(now);
+      d.setDate(d.getDate() - i);
+      d.setHours(0, 0, 0, 0);
+      days.push({
+        date: d,
+        label: d.toLocaleDateString("en-US", { month: "short", day: "numeric" }),
+        dayLabel: d.toLocaleDateString("en-US", { weekday: "short" }),
+        listening: 0, reading: 0, writing: 0, speaking: 0, total: 0,
+      });
+    }
+    const addToDay = (dateStr: string, mod: ModuleKey) => {
+      const d = new Date(dateStr);
+      d.setHours(0, 0, 0, 0);
+      const day = days.find(dd => dd.date.getTime() === d.getTime());
+      if (day) { day[mod]++; day.total++; }
+    };
+    for (const r of results) {
+      const mod = r.test_modules?.module_type as ModuleKey | undefined;
+      if (mod && mod !== "writing" && mod !== "speaking") addToDay(r.completed_at, mod);
+    }
+    for (const r of writingResults) addToDay(r.completed_at, "writing");
+    for (const r of speakingResults) addToDay(r.completed_at, "speaking");
+    return days;
+  }, [results, writingResults, speakingResults]);
+
+  const weekTotal = weeklyData.reduce((a, d) => a + d.total, 0);
+  const activeDays = weeklyData.filter(d => d.total > 0).length;
+
   // Radar data
   const radarData = (["listening", "reading", "writing", "speaking"] as ModuleKey[]).map(mod => ({
     module: MODULE_META[mod].label,
