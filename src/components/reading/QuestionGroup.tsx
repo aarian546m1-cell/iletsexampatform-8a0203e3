@@ -51,7 +51,8 @@ function getGroupInstruction(type: string, startQ: number, endQ: number): React.
       return (
         <>
           <h4 className="text-sm font-bold uppercase tracking-wide text-foreground mb-2">{range}</h4>
-          <p className="text-sm text-foreground font-medium">The passage has several sections. Choose the correct heading for each section from the list of headings below.</p>
+          <p className="text-sm text-foreground font-medium mb-1">The passage has several sections.</p>
+          <p className="text-sm text-foreground font-medium">Choose the correct heading for each section from the list of headings below.</p>
         </>
       );
     case "matching_information":
