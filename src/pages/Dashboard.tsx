@@ -345,6 +345,16 @@ export default function Dashboard() {
           </CardContent>
         </Card>
 
+        {/* Motivational Message */}
+        {motivationalMessage && (
+          <div className="mb-8 animate-fade-in rounded-xl border bg-gradient-to-r from-muted/50 to-muted/30 px-5 py-4" style={{ animationDelay: "0.09s" }}>
+            <p className={`text-sm font-medium ${motivationalMessage.color}`}>
+              <span className="mr-2 text-lg">{motivationalMessage.emoji}</span>
+              {motivationalMessage.text}
+            </p>
+          </div>
+        )}
+
         {/* Stats Strip */}
         <div className="mb-8 grid grid-cols-2 gap-3 sm:grid-cols-4 animate-fade-in" style={{ animationDelay: "0.1s" }}>
           {[
