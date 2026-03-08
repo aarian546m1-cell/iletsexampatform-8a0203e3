@@ -249,8 +249,7 @@ export default function SpeakingTest() {
     if (!topic) return;
     const q = topic.part1Questions[idx];
     setIsSpeaking(true);
-    // Small acknowledgement before next question
-    const ack = idx > 0 ? "Thank you. " : "";
+    const ack = idx > 0 ? `${getRandomAckFrom(part1AckPhrases.current, lastPart1AckIndex)} ` : "";
     const msg = ack + q;
     addExaminerMessage(msg);
     speak(msg, () => {
@@ -270,21 +269,39 @@ export default function SpeakingTest() {
     });
   }
 
+  const part1AckPhrases = useRef([
+    "Alright, let's move to the next question.",
+    "Okay, that's interesting.",
+    "I see.",
+    "Good. Now let me ask you…",
+    "Alright, another question for you.",
+    "Let's move on.",
+    "Okay, here's another one.",
+    "That's good to hear.",
+    "Thank you.",
+    "Right, okay.",
+  ]);
   const part3AckPhrases = useRef([
     "Good point.", "I see.", "Absolutely.", "Makes sense.",
     "Interesting perspective.", "Thanks for sharing.", "I understand.",
-    "Noted.", "Right.", "Got it."
+    "Noted.", "Right.", "Got it.",
+    "Alright, let's move to the next question.",
+    "Okay, that's interesting.",
   ]);
+  const lastPart1AckIndex = useRef(-1);
   const lastAckIndex = useRef(-1);
 
-  function getRandomAck(): string {
-    const phrases = part3AckPhrases.current;
+  function getRandomAckFrom(phrases: string[], lastRef: React.MutableRefObject<number>): string {
     let idx: number;
     do {
       idx = Math.floor(Math.random() * phrases.length);
-    } while (idx === lastAckIndex.current && phrases.length > 1);
-    lastAckIndex.current = idx;
+    } while (idx === lastRef.current && phrases.length > 1);
+    lastRef.current = idx;
     return phrases[idx];
+  }
+
+  function getRandomAck(): string {
+    return getRandomAckFrom(part3AckPhrases.current, lastAckIndex);
   }
 
   function askPart3Question(idx: number) {
@@ -394,10 +411,16 @@ export default function SpeakingTest() {
           <Badge variant="secondary" className="text-xs">{partLabel}</Badge>
           <Progress value={partProgress} className="h-2 flex-1" />
           {timerActive && (
-            <Badge variant={timer <= 15 ? "destructive" : "outline"} className="tabular-nums">
-              <Clock className="mr-1 h-3 w-3" />
+            <div className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-base font-bold tabular-nums ${
+              timer <= 15 
+                ? "bg-destructive text-destructive-foreground animate-pulse" 
+                : timer <= 30 
+                  ? "bg-destructive/10 text-destructive border border-destructive/30" 
+                  : "bg-primary/10 text-primary border border-primary/30"
+            }`}>
+              <Clock className="h-4 w-4" />
               {formatTime(timer)}
-            </Badge>
+            </div>
           )}
         </div>
       </div>
