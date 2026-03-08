@@ -270,21 +270,39 @@ export default function SpeakingTest() {
     });
   }
 
+  const part1AckPhrases = useRef([
+    "Alright, let's move to the next question.",
+    "Okay, that's interesting.",
+    "I see.",
+    "Good. Now let me ask you…",
+    "Alright, another question for you.",
+    "Let's move on.",
+    "Okay, here's another one.",
+    "That's good to hear.",
+    "Thank you.",
+    "Right, okay.",
+  ]);
   const part3AckPhrases = useRef([
     "Good point.", "I see.", "Absolutely.", "Makes sense.",
     "Interesting perspective.", "Thanks for sharing.", "I understand.",
-    "Noted.", "Right.", "Got it."
+    "Noted.", "Right.", "Got it.",
+    "Alright, let's move to the next question.",
+    "Okay, that's interesting.",
   ]);
+  const lastPart1AckIndex = useRef(-1);
   const lastAckIndex = useRef(-1);
 
-  function getRandomAck(): string {
-    const phrases = part3AckPhrases.current;
+  function getRandomAckFrom(phrases: string[], lastRef: React.MutableRefObject<number>): string {
     let idx: number;
     do {
       idx = Math.floor(Math.random() * phrases.length);
-    } while (idx === lastAckIndex.current && phrases.length > 1);
-    lastAckIndex.current = idx;
+    } while (idx === lastRef.current && phrases.length > 1);
+    lastRef.current = idx;
     return phrases[idx];
+  }
+
+  function getRandomAck(): string {
+    return getRandomAckFrom(part3AckPhrases.current, lastAckIndex);
   }
 
   function askPart3Question(idx: number) {
