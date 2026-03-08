@@ -42,6 +42,11 @@ import { READING_TEST_7 } from "./reading-test-7";
 import { READING_TEST_8 } from "./reading-test-8";
 import { READING_TEST_9 } from "./reading-test-9";
 import { READING_TEST_10 } from "./reading-test-10";
+import { READING_TEST_11 } from "./reading-test-11";
+import { READING_TEST_12 } from "./reading-test-12";
+import { READING_TEST_13 } from "./reading-test-13";
+import { READING_TEST_14 } from "./reading-test-14";
+import { READING_TEST_15 } from "./reading-test-15";
 import { READING_TEST_21 } from "./reading-test-21";
 import { READING_TEST_22 } from "./reading-test-22";
 import { READING_TEST_23 } from "./reading-test-23";
@@ -89,6 +94,11 @@ export const READING_TESTS: ReadingTest[] = [
   READING_TEST_8,
   READING_TEST_9,
   READING_TEST_10,
+  READING_TEST_11,
+  READING_TEST_12,
+  READING_TEST_13,
+  READING_TEST_14,
+  READING_TEST_15,
   READING_TEST_21,
   READING_TEST_22,
   READING_TEST_23,
