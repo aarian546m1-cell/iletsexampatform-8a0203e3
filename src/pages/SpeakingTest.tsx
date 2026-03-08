@@ -411,10 +411,16 @@ export default function SpeakingTest() {
           <Badge variant="secondary" className="text-xs">{partLabel}</Badge>
           <Progress value={partProgress} className="h-2 flex-1" />
           {timerActive && (
-            <Badge variant={timer <= 15 ? "destructive" : "outline"} className="tabular-nums">
-              <Clock className="mr-1 h-3 w-3" />
+            <div className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-base font-bold tabular-nums ${
+              timer <= 15 
+                ? "bg-destructive text-destructive-foreground animate-pulse" 
+                : timer <= 30 
+                  ? "bg-destructive/10 text-destructive border border-destructive/30" 
+                  : "bg-primary/10 text-primary border border-primary/30"
+            }`}>
+              <Clock className="h-4 w-4" />
               {formatTime(timer)}
-            </Badge>
+            </div>
           )}
         </div>
       </div>
