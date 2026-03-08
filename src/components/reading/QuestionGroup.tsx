@@ -267,12 +267,28 @@ export default function QuestionGroup({ questions, type, answers, onAnswer }: Qu
           <>
             {/* Headings list box */}
             <div className="border rounded-lg bg-card p-5 mb-6 shadow-sm">
-              <p className="text-sm font-bold text-foreground mb-3 border-b border-border pb-2">List of Headings</p>
-              <div className="space-y-2">
-                {allOptions.map((opt, i) => (
-                  <p key={i} className="text-sm text-foreground leading-relaxed pl-1">{opt}</p>
-                ))}
-              </div>
+              <p className="text-sm font-bold text-foreground mb-3">📄 List of Headings</p>
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-border">
+                    <th className="text-left py-2 pr-4 font-semibold text-muted-foreground w-16">Roman</th>
+                    <th className="text-left py-2 font-semibold text-muted-foreground">Heading Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {allOptions.map((opt, i) => {
+                    const dotIdx = opt.indexOf(".");
+                    const numeral = dotIdx !== -1 ? opt.substring(0, dotIdx).trim() : opt.split(/\s/)[0];
+                    const desc = dotIdx !== -1 ? opt.substring(dotIdx + 1).trim() : opt;
+                    return (
+                      <tr key={i} className="border-b border-border/40 last:border-0">
+                        <td className="py-2.5 pr-4 font-medium text-primary">{numeral}</td>
+                        <td className="py-2.5 text-foreground leading-relaxed">{desc}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
             </div>
 
             {/* Questions as "Section X" with select */}
