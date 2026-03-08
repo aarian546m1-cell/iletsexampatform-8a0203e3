@@ -249,8 +249,7 @@ export default function SpeakingTest() {
     if (!topic) return;
     const q = topic.part1Questions[idx];
     setIsSpeaking(true);
-    // Small acknowledgement before next question
-    const ack = idx > 0 ? "Thank you. " : "";
+    const ack = idx > 0 ? `${getRandomAckFrom(part1AckPhrases.current, lastPart1AckIndex)} ` : "";
     const msg = ack + q;
     addExaminerMessage(msg);
     speak(msg, () => {
