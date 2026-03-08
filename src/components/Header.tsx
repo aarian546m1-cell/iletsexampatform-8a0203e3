@@ -1,16 +1,18 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useTheme } from "@/hooks/use-theme";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
-import { Sun, Moon, Menu, LogOut, LayoutDashboard, BookOpen, GraduationCap, Shield } from "lucide-react";
+import { Sun, Moon, Menu, LogOut, LayoutDashboard, BookOpen, GraduationCap, Shield, ArrowLeft } from "lucide-react";
 import { useState } from "react";
 
 export default function Header() {
   const { user, isAdmin, signOut } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
+  const location = useLocation();
   const [open, setOpen] = useState(false);
+  const isHome = location.pathname === "/";
 
   const navLinks = [
     { to: "/tests", label: "Practice Tests", icon: BookOpen },
@@ -25,12 +27,24 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 border-b bg-card/80 backdrop-blur-lg">
       <div className="container flex h-16 items-center justify-between">
-        <Link to="/" className="flex items-center gap-2">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary">
-            <span className="font-serif text-lg font-bold text-primary-foreground">I</span>
-          </div>
-          <span className="font-serif text-xl font-bold">IELTS Pro</span>
-        </Link>
+        {isHome ? (
+          <Link to="/" className="flex items-center gap-2">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary">
+              <span className="font-serif text-lg font-bold text-primary-foreground">I</span>
+            </div>
+            <span className="font-serif text-xl font-bold">IELTS Pro</span>
+          </Link>
+        ) : (
+          <button
+            onClick={() => navigate(-1)}
+            className="group flex items-center gap-2.5 transition-all duration-200 hover:opacity-80"
+          >
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary transition-transform duration-200 group-hover:-translate-x-0.5">
+              <ArrowLeft className="h-4 w-4 text-primary-foreground" />
+            </div>
+            <span className="font-serif text-xl font-bold">IELTS Pro</span>
+          </button>
+        )}
 
         {/* Desktop Nav */}
         <nav className="hidden items-center gap-1 md:flex">
