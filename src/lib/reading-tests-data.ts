@@ -87,6 +87,11 @@ import { READING_TEST_52 } from "./reading-test-52";
 import { READING_TEST_53 } from "./reading-test-53";
 import { READING_TEST_54 } from "./reading-test-54";
 import { READING_TEST_55 } from "./reading-test-55";
+import { READING_TEST_56 } from "./reading-test-56";
+import { READING_TEST_57 } from "./reading-test-57";
+import { READING_TEST_58 } from "./reading-test-58";
+import { READING_TEST_59 } from "./reading-test-59";
+import { READING_TEST_60 } from "./reading-test-60";
 
 export const READING_TESTS: ReadingTest[] = [
   READING_TEST_1,
@@ -144,4 +149,9 @@ export const READING_TESTS: ReadingTest[] = [
   READING_TEST_53,
   READING_TEST_54,
   READING_TEST_55,
+  READING_TEST_56,
+  READING_TEST_57,
+  READING_TEST_58,
+  READING_TEST_59,
+  READING_TEST_60,
 ];
