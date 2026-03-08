@@ -1,11 +1,8 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { READING_TESTS } from "@/lib/reading-tests-data";
+import { READING_TESTS, ReadingQuestion } from "@/lib/reading-tests-data";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import {
@@ -19,9 +16,25 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Clock, AlertTriangle, Send } from "lucide-react";
+import QuestionGroup from "@/components/reading/QuestionGroup";
+import QuestionNavigator from "@/components/reading/QuestionNavigator";
 
 const TOTAL_SECONDS = 60 * 60;
 const WARNING_SECONDS = 5 * 60;
+
+/** Group consecutive questions by type */
+function groupQuestionsByType(questions: ReadingQuestion[]) {
+  const groups: { type: string; questions: ReadingQuestion[] }[] = [];
+  for (const q of questions) {
+    const last = groups[groups.length - 1];
+    if (last && last.type === q.type) {
+      last.questions.push(q);
+    } else {
+      groups.push({ type: q.type, questions: [q] });
+    }
+  }
+  return groups;
+}
 
 export default function ReadingExam() {
   const { testId } = useParams();
@@ -36,7 +49,6 @@ export default function ReadingExam() {
   const [submitted, setSubmitted] = useState(false);
 
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const startTimeRef = useRef(Date.now());
 
   // Restore saved state
   useEffect(() => {
@@ -100,37 +112,6 @@ export default function ReadingExam() {
     setAnswers((prev) => ({ ...prev, [qNum]: value }));
   };
 
-  const getInstructionText = (type: string): string => {
-    switch (type) {
-      case "matching_headings":
-        return "Choose the correct heading for each paragraph from the list of headings below.";
-      case "true_false_not_given":
-        return "Do the following statements agree with the information given in the passage? Write TRUE, FALSE or NOT GIVEN.";
-      case "yes_no_not_given":
-        return "Do the following statements agree with the views/claims of the writer? Write YES, NO or NOT GIVEN.";
-      case "multiple_choice":
-        return "Choose the correct letter, A, B, C or D.";
-      case "matching_information":
-        return "Which paragraph contains the following information? Write the correct letter.";
-      case "matching_features":
-        return "Match each statement with the correct person/feature from the list below.";
-      case "sentence_completion":
-        return "Complete the sentences below. Write NO MORE THAN TWO WORDS from the passage for each answer.";
-      case "summary_completion":
-        return "Complete the summary below. Choose NO MORE THAN TWO WORDS from the passage for each answer.";
-      case "table_completion":
-        return "Complete the table below. Write NO MORE THAN TWO WORDS from the passage for each answer.";
-      case "diagram_completion":
-        return "Label the diagram below. Write NO MORE THAN TWO WORDS for each answer.";
-      case "short_answer":
-        return "Answer the questions below. Write NO MORE THAN THREE WORDS for each answer.";
-      case "flow_chart_completion":
-        return "Complete the flow chart below. Write NO MORE THAN TWO WORDS for each answer.";
-      default:
-        return "";
-    }
-  };
-
   if (!test) {
     return (
       <div className="flex h-screen items-center justify-center bg-background">
@@ -145,36 +126,37 @@ export default function ReadingExam() {
   const minutes = Math.floor(secondsLeft / 60);
   const seconds = secondsLeft % 60;
   const isLowTime = secondsLeft <= WARNING_SECONDS;
+  const questionGroups = groupQuestionsByType(passage.questions);
 
   return (
     <div className="flex h-screen flex-col bg-background">
-      {/* Top bar */}
-      <div className="flex flex-wrap items-center justify-between gap-2 border-b bg-card px-4 py-2">
+      {/* ─── Top bar ─── */}
+      <header className="flex flex-wrap items-center justify-between gap-2 border-b bg-card px-4 py-2 shadow-sm">
         <div className="flex items-center gap-3">
-          <span className="font-serif text-lg font-bold">
-            IELTS Reading — Test {test.id}
+          <span className="font-serif text-lg font-bold text-foreground">
+            IELTS Academic Reading
           </span>
-          <Badge variant="secondary" className="text-xs">Academic</Badge>
+          <Badge variant="secondary" className="text-xs font-medium">Test {test.id}</Badge>
         </div>
 
         {/* Section tabs */}
         <div className="flex gap-1">
-          {test.passages.map((p, i) => (
+          {test.passages.map((_, i) => (
             <button
               key={i}
               onClick={() => setActiveSection(i)}
-              className={`rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${
+              className={`rounded-md px-3 py-1.5 text-xs font-semibold transition-colors ${
                 activeSection === i
-                  ? "bg-primary text-primary-foreground"
+                  ? "bg-primary text-primary-foreground shadow-sm"
                   : "bg-muted text-muted-foreground hover:bg-muted/80"
               }`}
             >
-              Section {i + 1}
+              Passage {i + 1}
             </button>
           ))}
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
           <div
             className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 font-mono text-sm font-semibold ${
               isLowTime
@@ -190,127 +172,82 @@ export default function ReadingExam() {
             Submit
           </Button>
         </div>
-      </div>
+      </header>
 
-      {/* Progress */}
-      <div className="border-b bg-muted/30 px-4 py-1.5">
+      {/* ─── Progress & Navigator ─── */}
+      <div className="border-b bg-card/50 px-4 py-2 space-y-2">
         <div className="flex items-center gap-3 text-xs text-muted-foreground">
-          <span>{answeredCount}/{totalQuestions} answered</span>
+          <span className="font-medium">{answeredCount}/{totalQuestions} answered</span>
           <Progress value={(answeredCount / totalQuestions) * 100} className="h-1.5 flex-1" />
-          <span>{Math.round((secondsLeft / TOTAL_SECONDS) * 100)}% time remaining</span>
+          <span>{Math.round((secondsLeft / TOTAL_SECONDS) * 100)}% time</span>
         </div>
+        <QuestionNavigator totalQuestions={totalQuestions} answers={answers} />
       </div>
 
-      {/* Warning */}
+      {/* ─── Warning ─── */}
       {showWarning && secondsLeft > 0 && (
-        <div className="flex items-center gap-2 bg-warning/10 px-4 py-2 text-sm text-warning">
+        <div className="flex items-center gap-2 bg-destructive/10 px-4 py-2 text-sm text-destructive">
           <AlertTriangle className="h-4 w-4" />
-          <span className="font-medium">5 minutes remaining!</span>
+          <span className="font-semibold">5 minutes remaining!</span>
           <Button variant="ghost" size="sm" className="ml-auto h-6 text-xs" onClick={() => setShowWarning(false)}>
             Dismiss
           </Button>
         </div>
       )}
 
-      {/* Main split */}
+      {/* ─── Main split pane ─── */}
       <div className="flex flex-1 overflow-hidden">
-        {/* LEFT — Passage */}
+        {/* LEFT — Reading Passage */}
         <ScrollArea className="w-1/2 border-r">
-          <div className="p-6">
-            <h2 className="mb-4 font-serif text-2xl font-bold">{passage.title}</h2>
-            <div className="whitespace-pre-line text-sm leading-[1.8] text-foreground">
-              {passage.text}
+          <div className="p-6 max-w-2xl">
+            <div className="mb-6">
+              <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-1">
+                Reading Passage {activeSection + 1}
+              </p>
+              <h2 className="font-serif text-2xl font-bold text-foreground leading-tight">
+                {passage.title}
+              </h2>
             </div>
+            <article className="prose prose-sm max-w-none">
+              <div className="whitespace-pre-line text-sm leading-[1.9] text-foreground/90">
+                {passage.text}
+              </div>
+            </article>
           </div>
         </ScrollArea>
 
-        {/* RIGHT — Questions */}
-        <ScrollArea className="w-1/2">
-          <div className="p-6 space-y-6">
-            <h3 className="font-serif text-lg font-semibold text-muted-foreground">
-              Questions {passage.questions[0].number}–{passage.questions[passage.questions.length - 1].number}
-            </h3>
+        {/* RIGHT — Questions (Cambridge Style) */}
+        <ScrollArea className="w-1/2 bg-card/30">
+          <div className="p-6 max-w-2xl">
+            <div className="mb-6 pb-4 border-b border-border">
+              <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-1">
+                Questions {passage.questions[0].number}–{passage.questions[passage.questions.length - 1].number}
+              </p>
+              <p className="text-sm text-muted-foreground">
+                Answer the questions based on Reading Passage {activeSection + 1}.
+              </p>
+            </div>
 
-            {passage.questions.map((q, idx) => {
-              const prevType = idx > 0 ? passage.questions[idx - 1].type : null;
-              const showInstruction = q.type !== prevType;
-              return (
-                <div key={q.number} className="space-y-3">
-                  {showInstruction && (
-                    <div className="rounded-lg bg-muted/50 p-3 text-sm font-medium text-muted-foreground italic border-l-4 border-primary/30">
-                      {getInstructionText(q.type)}
-                    </div>
-                  )}
-                  <div className="rounded-lg border bg-card p-4">
-                    <p className="mb-3 text-sm font-medium">
-                      <span className="mr-2 inline-flex h-6 w-6 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">
-                        {q.number}
-                      </span>
-                      {q.text}
-                    </p>
-
-                    {(q.type === "true_false_not_given" || q.type === "yes_no_not_given") && (
-                      <RadioGroup
-                        value={answers[q.number] || ""}
-                        onValueChange={(v) => setAnswer(q.number, v)}
-                        className="flex flex-wrap gap-3"
-                      >
-                        {(q.type === "true_false_not_given"
-                          ? ["True", "False", "Not Given"]
-                          : ["Yes", "No", "Not Given"]
-                        ).map((opt) => (
-                          <div key={opt} className="flex items-center gap-1.5">
-                            <RadioGroupItem value={opt} id={`q${q.number}-${opt}`} />
-                            <Label htmlFor={`q${q.number}-${opt}`} className="cursor-pointer text-sm">
-                              {opt}
-                            </Label>
-                          </div>
-                        ))}
-                      </RadioGroup>
-                    )}
-
-                    {(q.type === "multiple_choice" || q.type === "matching_headings" || q.type === "matching_information" || q.type === "matching_features") && q.options && (
-                      <RadioGroup
-                        value={answers[q.number] || ""}
-                        onValueChange={(v) => setAnswer(q.number, v)}
-                        className="space-y-2"
-                      >
-                        {q.options.map((opt) => {
-                          const val = opt.split(/[.\s]/)[0];
-                          return (
-                            <div key={opt} className="flex items-center gap-2">
-                              <RadioGroupItem value={val} id={`q${q.number}-${val}`} />
-                              <Label htmlFor={`q${q.number}-${val}`} className="cursor-pointer text-sm">
-                                {opt}
-                              </Label>
-                            </div>
-                          );
-                        })}
-                      </RadioGroup>
-                    )}
-
-                    {(q.type === "sentence_completion" || q.type === "summary_completion" || q.type === "table_completion" || q.type === "diagram_completion" || q.type === "short_answer" || q.type === "flow_chart_completion") && (
-                      <Input
-                        value={answers[q.number] || ""}
-                        onChange={(e) => setAnswer(q.number, e.target.value)}
-                        placeholder="Type your answer..."
-                        className="mt-1"
-                      />
-                    )}
-                  </div>
-                </div>
-              );
-            })}
+            {questionGroups.map((group, i) => (
+              <div key={`${group.type}-${i}`} id={`question-${group.questions[0].number}`}>
+                <QuestionGroup
+                  questions={group.questions}
+                  type={group.type}
+                  answers={answers}
+                  onAnswer={setAnswer}
+                />
+              </div>
+            ))}
 
             {/* Section navigation */}
-            <div className="flex justify-between pt-4">
+            <div className="flex justify-between pt-4 border-t border-border">
               <Button
                 variant="outline"
                 size="sm"
                 disabled={activeSection === 0}
                 onClick={() => setActiveSection((p) => p - 1)}
               >
-                ← Previous Section
+                ← Previous Passage
               </Button>
               <Button
                 variant="outline"
@@ -318,14 +255,14 @@ export default function ReadingExam() {
                 disabled={activeSection === 2}
                 onClick={() => setActiveSection((p) => p + 1)}
               >
-                Next Section →
+                Next Passage →
               </Button>
             </div>
           </div>
         </ScrollArea>
       </div>
 
-      {/* Confirm dialog */}
+      {/* ─── Confirm dialog ─── */}
       <AlertDialog open={confirmSubmit} onOpenChange={setConfirmSubmit}>
         <AlertDialogContent>
           <AlertDialogHeader>
@@ -333,7 +270,7 @@ export default function ReadingExam() {
             <AlertDialogDescription>
               You have answered {answeredCount} out of {totalQuestions} questions.
               {answeredCount < totalQuestions && (
-                <span className="block mt-1 text-destructive">
+                <span className="block mt-1 text-destructive font-medium">
                   {totalQuestions - answeredCount} questions are unanswered.
                 </span>
               )}
