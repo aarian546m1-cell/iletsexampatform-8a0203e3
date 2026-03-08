@@ -163,9 +163,13 @@ export default function ListeningExam() {
 
     setAudioSegments(allSegments);
     setAudioLoading(false);
-    setPhase("playing");
     setActiveSection(0);
     setCurrentSegmentIndex(0);
+    startTimeRef.current = Date.now();
+
+    // Start section prep countdown
+    setPhase("section_prep");
+    setPrepCountdown(PREP_SECONDS);
     startTimeRef.current = Date.now();
 
     // Start timer
