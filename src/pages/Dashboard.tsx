@@ -183,6 +183,30 @@ export default function Dashboard() {
     return "text-destructive";
   };
 
+  const BAND_OPTIONS = [4.0, 4.5, 5.0, 5.5, 6.0, 6.5, 7.0, 7.5, 8.0, 8.5, 9.0];
+
+  const saveTargetBand = async (band: number) => {
+    if (!user) return;
+    setTargetBand(band);
+    setEditingTarget(false);
+    await supabase.from("profiles").update({ target_band: band } as any).eq("user_id", user.id);
+  };
+
+  const clearTargetBand = async () => {
+    if (!user) return;
+    setTargetBand(null);
+    setEditingTarget(false);
+    await supabase.from("profiles").update({ target_band: null } as any).eq("user_id", user.id);
+  };
+
+  const progressToTarget = targetBand && overallScore !== null
+    ? Math.min(100, Math.round((overallScore / targetBand) * 100))
+    : null;
+
+  const gapToTarget = targetBand && overallScore !== null
+    ? Math.max(0, targetBand - overallScore)
+    : null;
+
   return (
     <div className="min-h-screen bg-background">
       {/* Custom Dashboard Header */}
