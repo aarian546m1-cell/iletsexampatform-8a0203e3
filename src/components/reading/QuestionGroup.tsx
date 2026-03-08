@@ -242,47 +242,90 @@ export default function QuestionGroup({ questions, type, answers, onAnswer }: Qu
   const endQ = questions[questions.length - 1].number;
 
   return (
-    <div className="mb-8">
+    <div className="mb-10">
       {/* Instruction block */}
-      <div className="border-l-4 border-primary bg-muted/40 rounded-r-md p-4 mb-4">
+      <div className="border-l-4 border-primary bg-muted/40 rounded-r-md p-4 mb-5">
         {getGroupInstruction(type, startQ, endQ)}
       </div>
 
-      {/* Heading options list for matching_headings */}
-      {type === "matching_headings" && questions[0]?.options && (
-        <div className="border rounded-md bg-card p-4 mb-4">
-          <p className="text-xs font-bold uppercase tracking-wide text-muted-foreground mb-2">List of Headings</p>
-          <div className="space-y-1">
-            {questions[0].options.map((opt, i) => (
-              <p key={i} className="text-sm text-foreground">{opt}</p>
-            ))}
-          </div>
+      {/* ── Matching Headings: Cambridge layout ── */}
+      {type === "matching_headings" && (() => {
+        // Collect all unique options from all questions in this group
+        const allOptions: string[] = [];
+        const seen = new Set<string>();
+        for (const q of questions) {
+          if (q.options) {
+            for (const opt of q.options) {
+              if (!seen.has(opt)) {
+                seen.add(opt);
+                allOptions.push(opt);
+              }
+            }
+          }
+        }
+        return (
+          <>
+            {/* Headings list box */}
+            <div className="border rounded-lg bg-card p-5 mb-6 shadow-sm">
+              <p className="text-sm font-bold text-foreground mb-3 border-b border-border pb-2">List of Headings</p>
+              <div className="space-y-2">
+                {allOptions.map((opt, i) => (
+                  <p key={i} className="text-sm text-foreground leading-relaxed pl-1">{opt}</p>
+                ))}
+              </div>
+            </div>
+
+            {/* Questions as "Section X" with select */}
+            <div className="space-y-3">
+              {questions.map((q) => {
+                const answer = answers[q.number] || "";
+                const handleAnswer = (v: string) => onAnswer(q.number, v);
+                return (
+                  <div key={q.number} className="flex items-center gap-3 py-2 border-b border-border/40 last:border-0">
+                    <span className="font-bold text-sm text-foreground w-6 text-center">{q.number}</span>
+                    <p className="text-sm text-foreground flex-1">{cleanQuestionText(q.text)}</p>
+                    <select
+                      value={answer}
+                      onChange={(e) => handleAnswer(e.target.value)}
+                      className="h-8 w-16 rounded border border-input bg-background px-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                    >
+                      <option value="">—</option>
+                      {allOptions.map((opt) => {
+                        const val = opt.split(/[.\s]/)[0];
+                        return <option key={val} value={val}>{val}</option>;
+                      })}
+                    </select>
+                  </div>
+                );
+              })}
+            </div>
+          </>
+        );
+      })()}
+
+      {/* ── All other question types ── */}
+      {type !== "matching_headings" && (
+        <div className="divide-y divide-border/50">
+          {questions.map((q) => {
+            const answer = answers[q.number] || "";
+            const handleAnswer = (v: string) => onAnswer(q.number, v);
+
+            switch (type) {
+              case "multiple_choice":
+                return <MCQuestion key={q.number} q={q} answer={answer} onAnswer={handleAnswer} />;
+              case "true_false_not_given":
+                return <TFNGQuestion key={q.number} q={q} answer={answer} onAnswer={handleAnswer} variant="tfng" />;
+              case "yes_no_not_given":
+                return <TFNGQuestion key={q.number} q={q} answer={answer} onAnswer={handleAnswer} variant="ynng" />;
+              case "matching_information":
+              case "matching_features":
+                return <MatchingQuestion key={q.number} q={q} answer={answer} onAnswer={handleAnswer} />;
+              default:
+                return <CompletionQuestion key={q.number} q={q} answer={answer} onAnswer={handleAnswer} />;
+            }
+          })}
         </div>
       )}
-
-      {/* Questions */}
-      <div className="divide-y divide-border/50">
-        {questions.map((q) => {
-          const answer = answers[q.number] || "";
-          const handleAnswer = (v: string) => onAnswer(q.number, v);
-
-          switch (type) {
-            case "multiple_choice":
-              return <MCQuestion key={q.number} q={q} answer={answer} onAnswer={handleAnswer} />;
-            case "true_false_not_given":
-              return <TFNGQuestion key={q.number} q={q} answer={answer} onAnswer={handleAnswer} variant="tfng" />;
-            case "yes_no_not_given":
-              return <TFNGQuestion key={q.number} q={q} answer={answer} onAnswer={handleAnswer} variant="ynng" />;
-            case "matching_headings":
-              return <MatchingQuestion key={q.number} q={q} answer={answer} onAnswer={handleAnswer} />;
-            case "matching_information":
-            case "matching_features":
-              return <MatchingQuestion key={q.number} q={q} answer={answer} onAnswer={handleAnswer} />;
-            default:
-              return <CompletionQuestion key={q.number} q={q} answer={answer} onAnswer={handleAnswer} />;
-          }
-        })}
-      </div>
     </div>
   );
 }
