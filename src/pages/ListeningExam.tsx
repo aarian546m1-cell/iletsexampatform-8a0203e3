@@ -238,10 +238,27 @@ export default function ListeningExam() {
     [audioSegments, test, practiceMode, toast]
   );
 
+  // Section prep countdown
+  useEffect(() => {
+    if (phase !== "section_prep") return;
+    setPrepCountdown(PREP_SECONDS);
+    prepTimerRef.current = setInterval(() => {
+      setPrepCountdown((prev) => {
+        if (prev <= 1) {
+          clearInterval(prepTimerRef.current!);
+          setPhase("playing");
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+    return () => { if (prepTimerRef.current) clearInterval(prepTimerRef.current); };
+  }, [phase, activeSection]);
+
   // Auto-play when phase changes to playing
   useEffect(() => {
     if (phase === "playing" && audioSegments.length > 0 && !isPlaying) {
-      playSegment(0, 0);
+      playSegment(activeSection, 0);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [phase, audioSegments]);
